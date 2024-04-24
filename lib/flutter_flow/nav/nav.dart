@@ -71,16 +71,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
-      errorBuilder: (context, state) => appStateNotifier.loggedIn
-          ? const ProductsCopyWidget()
-          : const InventoryMainWidget(),
+      errorBuilder: (context, state) =>
+          appStateNotifier.loggedIn ? const ProductsWidget() : const ProductsCopyWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
-              ? const ProductsCopyWidget()
-              : const InventoryMainWidget(),
+              ? const ProductsWidget()
+              : const ProductsCopyWidget(),
         ),
         FFRoute(
           name: 'Products',
@@ -316,7 +315,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/inventoryMain';
+            return '/productsCopy';
           }
           return null;
         },
