@@ -20,3 +20,5 @@ export '/pages/products/products_copy2/products_copy2_widget.dart'
     show ProductsCopy2Widget;
 export '/pages/inventory/inventory_main/inventory_main_widget.dart'
     show InventoryMainWidget;
+export '/pages/products/products_copy_copy/products_copy_copy_widget.dart'
+    show ProductsCopyCopyWidget;

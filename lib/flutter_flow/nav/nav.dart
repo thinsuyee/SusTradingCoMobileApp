@@ -145,6 +145,11 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'InventoryMain',
           path: '/inventoryMain',
           builder: (context, params) => const InventoryMainWidget(),
+        ),
+        FFRoute(
+          name: 'ProductsCopyCopy',
+          path: '/productsCopyCopy',
+          builder: (context, params) => const ProductsCopyCopyWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

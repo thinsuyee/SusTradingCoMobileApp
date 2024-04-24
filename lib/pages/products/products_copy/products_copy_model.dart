@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:async';
 import 'products_copy_widget.dart' show ProductsCopyWidget;
@@ -15,10 +16,16 @@ class ProductsCopyModel extends FlutterFlowModel<ProductsCopyWidget> {
   TextEditingController? searchBarTextController;
   String? searchBarSelectedOption;
   String? Function(BuildContext, String?)? searchBarTextControllerValidator;
-  // State field(s) for ListView widget.
+  List<ProductsRecord> simpleSearchResults = [];
+  // State field(s) for withoutSearch widget.
 
-  PagingController<ApiPagingParams, dynamic>? listViewPagingController;
-  Function(ApiPagingParams nextPageMarker)? listViewApiCall;
+  PagingController<ApiPagingParams, dynamic>? withoutSearchPagingController;
+  Function(ApiPagingParams nextPageMarker)? withoutSearchApiCall;
+
+  // State field(s) for searchResult widget.
+
+  PagingController<ApiPagingParams, dynamic>? searchResultPagingController;
+  Function(ApiPagingParams nextPageMarker)? searchResultApiCall;
 
   @override
   void initState(BuildContext context) {}
@@ -28,18 +35,20 @@ class ProductsCopyModel extends FlutterFlowModel<ProductsCopyWidget> {
     unfocusNode.dispose();
     searchBarFocusNode?.dispose();
 
-    listViewPagingController?.dispose();
+    withoutSearchPagingController?.dispose();
+    searchResultPagingController?.dispose();
   }
 
   /// Additional helper methods.
-  PagingController<ApiPagingParams, dynamic> setListViewController(
+  PagingController<ApiPagingParams, dynamic> setWithoutSearchController(
     Function(ApiPagingParams) apiCall,
   ) {
-    listViewApiCall = apiCall;
-    return listViewPagingController ??= _createListViewController(apiCall);
+    withoutSearchApiCall = apiCall;
+    return withoutSearchPagingController ??=
+        _createWithoutSearchController(apiCall);
   }
 
-  PagingController<ApiPagingParams, dynamic> _createListViewController(
+  PagingController<ApiPagingParams, dynamic> _createWithoutSearchController(
     Function(ApiPagingParams) query,
   ) {
     final controller = PagingController<ApiPagingParams, dynamic>(
@@ -49,27 +58,28 @@ class ProductsCopyModel extends FlutterFlowModel<ProductsCopyWidget> {
         lastResponse: null,
       ),
     );
-    return controller..addPageRequestListener(listViewGetProductsAPIPage);
+    return controller..addPageRequestListener(withoutSearchGetProductsAPIPage);
   }
 
-  void listViewGetProductsAPIPage(ApiPagingParams nextPageMarker) =>
-      listViewApiCall!(nextPageMarker).then((listViewGetProductsAPIResponse) {
-        final pageItems =
-            (listViewGetProductsAPIResponse.jsonBody ?? []).toList() as List;
+  void withoutSearchGetProductsAPIPage(ApiPagingParams nextPageMarker) =>
+      withoutSearchApiCall!(nextPageMarker)
+          .then((withoutSearchGetProductsAPIResponse) {
+        final pageItems = (withoutSearchGetProductsAPIResponse.jsonBody ?? [])
+            .toList() as List;
         final newNumItems = nextPageMarker.numItems + pageItems.length;
-        listViewPagingController?.appendPage(
+        withoutSearchPagingController?.appendPage(
           pageItems,
           (pageItems.isNotEmpty)
               ? ApiPagingParams(
                   nextPageNumber: nextPageMarker.nextPageNumber + 1,
                   numItems: newNumItems,
-                  lastResponse: listViewGetProductsAPIResponse,
+                  lastResponse: withoutSearchGetProductsAPIResponse,
                 )
               : null,
         );
       });
 
-  Future waitForOnePageForListView({
+  Future waitForOnePageForWithoutSearch({
     double minWait = 0,
     double maxWait = double.infinity,
   }) async {
@@ -78,7 +88,62 @@ class ProductsCopyModel extends FlutterFlowModel<ProductsCopyWidget> {
       await Future.delayed(const Duration(milliseconds: 50));
       final timeElapsed = stopwatch.elapsedMilliseconds;
       final requestComplete =
-          (listViewPagingController?.nextPageKey?.nextPageNumber ?? 0) > 0;
+          (withoutSearchPagingController?.nextPageKey?.nextPageNumber ?? 0) > 0;
+      if (timeElapsed > maxWait || (requestComplete && timeElapsed > minWait)) {
+        break;
+      }
+    }
+  }
+
+  PagingController<ApiPagingParams, dynamic> setSearchResultController(
+    Function(ApiPagingParams) apiCall,
+  ) {
+    searchResultApiCall = apiCall;
+    return searchResultPagingController ??=
+        _createSearchResultController(apiCall);
+  }
+
+  PagingController<ApiPagingParams, dynamic> _createSearchResultController(
+    Function(ApiPagingParams) query,
+  ) {
+    final controller = PagingController<ApiPagingParams, dynamic>(
+      firstPageKey: ApiPagingParams(
+        nextPageNumber: 0,
+        numItems: 0,
+        lastResponse: null,
+      ),
+    );
+    return controller..addPageRequestListener(searchResultGetProductsAPIPage);
+  }
+
+  void searchResultGetProductsAPIPage(ApiPagingParams nextPageMarker) =>
+      searchResultApiCall!(nextPageMarker)
+          .then((searchResultGetProductsAPIResponse) {
+        final pageItems = (searchResultGetProductsAPIResponse.jsonBody ?? [])
+            .toList() as List;
+        final newNumItems = nextPageMarker.numItems + pageItems.length;
+        searchResultPagingController?.appendPage(
+          pageItems,
+          (pageItems.isNotEmpty)
+              ? ApiPagingParams(
+                  nextPageNumber: nextPageMarker.nextPageNumber + 1,
+                  numItems: newNumItems,
+                  lastResponse: searchResultGetProductsAPIResponse,
+                )
+              : null,
+        );
+      });
+
+  Future waitForOnePageForSearchResult({
+    double minWait = 0,
+    double maxWait = double.infinity,
+  }) async {
+    final stopwatch = Stopwatch()..start();
+    while (true) {
+      await Future.delayed(const Duration(milliseconds: 50));
+      final timeElapsed = stopwatch.elapsedMilliseconds;
+      final requestComplete =
+          (searchResultPagingController?.nextPageKey?.nextPageNumber ?? 0) > 0;
       if (timeElapsed > maxWait || (requestComplete && timeElapsed > minWait)) {
         break;
       }

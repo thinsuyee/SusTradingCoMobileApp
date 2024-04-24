@@ -20,7 +20,7 @@ class FFAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool _searchActive = false;
+  bool _searchActive = true;
   bool get searchActive => _searchActive;
   set searchActive(bool value) {
     _searchActive = value;
