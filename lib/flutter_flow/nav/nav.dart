@@ -73,20 +73,16 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
-      errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? const ProductPageWidget() : const ProductListWidget(),
+      errorBuilder: (context, state) => appStateNotifier.loggedIn
+          ? const ProductListWidget()
+          : const TestProductListWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
-              ? const ProductPageWidget()
-              : const ProductListWidget(),
-        ),
-        FFRoute(
-          name: 'Products',
-          path: '/products',
-          builder: (context, params) => const ProductsWidget(),
+              ? const ProductListWidget()
+              : const TestProductListWidget(),
         ),
         FFRoute(
           name: 'AddUpdateInventory',
@@ -139,9 +135,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => const EditProfileWidget(),
         ),
         FFRoute(
-          name: 'ProductListing',
+          name: 'testProductList',
           path: '/productTest',
-          builder: (context, params) => const ProductListingWidget(),
+          builder: (context, params) => const TestProductListWidget(),
         ),
         FFRoute(
           name: 'InventoryMain',
@@ -149,58 +145,22 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => const InventoryMainWidget(),
         ),
         FFRoute(
-          name: 'ProductPage',
-          path: '/productPage',
-          builder: (context, params) => const ProductPageWidget(),
-        ),
-        FFRoute(
-          name: 'testProduct',
-          path: '/testProduct',
-          builder: (context, params) => const TestProductWidget(),
-        ),
-        FFRoute(
           name: 'ProductDetails',
-          path: '/ProductDetails',
+          path: '/productDetails',
           builder: (context, params) => ProductDetailsWidget(
-            name: params.getParam<String>(
-              'name',
+            id: params.getParam(
+              'id',
               ParamType.String,
-              true,
             ),
           ),
         ),
         FFRoute(
-          name: 'ProductListCopy',
-          path: '/ProductListCopy',
-          builder: (context, params) => const ProductListCopyWidget(),
-        ),
-        FFRoute(
-          name: 'ProductsCopyCopyCopy',
-          path: '/productsCopyCopyCopy',
-          builder: (context, params) => const ProductsCopyCopyCopyWidget(),
-        ),
-        FFRoute(
-          name: 'ProductsCopy3Copy',
-          path: '/productsCopy3Copy',
-          builder: (context, params) => const ProductsCopy3CopyWidget(),
-        ),
-        FFRoute(
           name: 'testProductDetails',
-          path: '/ProductDetailsCopy',
+          path: '/testProductDetails',
           builder: (context, params) => TestProductDetailsWidget(
             productID: params.getParam(
               'productID',
               ParamType.int,
-            ),
-          ),
-        ),
-        FFRoute(
-          name: 'ProductDetailsPage',
-          path: '/productDetailsPage',
-          builder: (context, params) => ProductDetailsPageWidget(
-            id: params.getParam(
-              'id',
-              ParamType.String,
             ),
           ),
         )
@@ -298,7 +258,7 @@ class FFParameters {
   // present is the special extra parameter reserved for the transition info.
   bool get isEmpty =>
       state.allParams.isEmpty ||
-      (state.extraMap.length == 1 &&
+      (state.allParams.length == 1 &&
           state.extraMap.containsKey(kTransitionInfoKey));
   bool isAsyncParam(MapEntry<String, dynamic> param) =>
       asyncParams.containsKey(param.key) && param.value is String;
@@ -319,11 +279,11 @@ class FFParameters {
 
   dynamic getParam<T>(
     String paramName,
-    ParamType type, [
+    ParamType type, {
     bool isList = false,
     List<String>? collectionNamePath,
     StructBuilder<T>? structBuilder,
-  ]) {
+  }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
     }
@@ -375,7 +335,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/ProductList';
+            return '/productTest';
           }
           return null;
         },

@@ -1,19 +1,18 @@
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:async';
-import 'products_copy_copy_copy_widget.dart' show ProductsCopyCopyCopyWidget;
+import 'test_product_list_widget.dart' show TestProductListWidget;
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class ProductsCopyCopyCopyModel
-    extends FlutterFlowModel<ProductsCopyCopyCopyWidget> {
+class TestProductListModel extends FlutterFlowModel<TestProductListWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // State field(s) for searchBar widget.
-  FocusNode? searchBarFocusNode;
-  TextEditingController? searchBarTextController;
-  String? Function(BuildContext, String?)? searchBarTextControllerValidator;
+  // State field(s) for TextField widget.
+  FocusNode? textFieldFocusNode;
+  TextEditingController? textController;
+  String? Function(BuildContext, String?)? textControllerValidator;
   // State field(s) for ListView widget.
 
   PagingController<ApiPagingParams, dynamic>? listViewPagingController;
@@ -25,8 +24,8 @@ class ProductsCopyCopyCopyModel
   @override
   void dispose() {
     unfocusNode.dispose();
-    searchBarFocusNode?.dispose();
-    searchBarTextController?.dispose();
+    textFieldFocusNode?.dispose();
+    textController?.dispose();
 
     listViewPagingController?.dispose();
   }
@@ -49,14 +48,16 @@ class ProductsCopyCopyCopyModel
         lastResponse: null,
       ),
     );
-    return controller..addPageRequestListener(listViewSearchProductByIDPage);
+    return controller..addPageRequestListener(listViewTestGetProductsPage);
   }
 
-  void listViewSearchProductByIDPage(ApiPagingParams nextPageMarker) =>
-      listViewApiCall!(nextPageMarker)
-          .then((listViewSearchProductByIDResponse) {
-        final pageItems =
-            (listViewSearchProductByIDResponse.jsonBody ?? []).toList() as List;
+  void listViewTestGetProductsPage(ApiPagingParams nextPageMarker) =>
+      listViewApiCall!(nextPageMarker).then((listViewTestGetProductsResponse) {
+        final pageItems = (TestGetProductsCall.products(
+                  listViewTestGetProductsResponse.jsonBody,
+                )! ??
+                [])
+            .toList();
         final newNumItems = nextPageMarker.numItems + pageItems.length;
         listViewPagingController?.appendPage(
           pageItems,
@@ -64,7 +65,7 @@ class ProductsCopyCopyCopyModel
               ? ApiPagingParams(
                   nextPageNumber: nextPageMarker.nextPageNumber + 1,
                   numItems: newNumItems,
-                  lastResponse: listViewSearchProductByIDResponse,
+                  lastResponse: listViewTestGetProductsResponse,
                 )
               : null,
         );
