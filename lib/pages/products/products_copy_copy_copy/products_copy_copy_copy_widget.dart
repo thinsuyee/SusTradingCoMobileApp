@@ -1,32 +1,35 @@
 import '/backend/api_requests/api_calls.dart';
-import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'products_copy_model.dart';
-export 'products_copy_model.dart';
+import 'products_copy_copy_copy_model.dart';
+export 'products_copy_copy_copy_model.dart';
 
-class ProductsCopyWidget extends StatefulWidget {
-  const ProductsCopyWidget({super.key});
+class ProductsCopyCopyCopyWidget extends StatefulWidget {
+  const ProductsCopyCopyCopyWidget({super.key});
 
   @override
-  State<ProductsCopyWidget> createState() => _ProductsCopyWidgetState();
+  State<ProductsCopyCopyCopyWidget> createState() =>
+      _ProductsCopyCopyCopyWidgetState();
 }
 
-class _ProductsCopyWidgetState extends State<ProductsCopyWidget> {
-  late ProductsCopyModel _model;
+class _ProductsCopyCopyCopyWidgetState
+    extends State<ProductsCopyCopyCopyWidget> {
+  late ProductsCopyCopyCopyModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ProductsCopyModel());
+    _model = createModel(context, () => ProductsCopyCopyCopyModel());
 
     _model.searchBarTextController ??= TextEditingController();
+    _model.searchBarFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -89,194 +92,80 @@ class _ProductsCopyWidgetState extends State<ProductsCopyWidget> {
                     Expanded(
                       child: Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: FutureBuilder<ApiCallResponse>(
-                          future: GetProductsCall.call(),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: SizedBox(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      FlutterFlowTheme.of(context).primary,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                            final searchBarGetProductsResponse = snapshot.data!;
-                            return SizedBox(
-                              width: 30.0,
-                              child: Autocomplete<String>(
-                                initialValue: const TextEditingValue(),
-                                optionsBuilder: (textEditingValue) {
-                                  if (textEditingValue.text == '') {
-                                    return const Iterable<String>.empty();
-                                  }
-                                  return (getJsonField(
-                                    searchBarGetProductsResponse.jsonBody,
-                                    r'''$.title''',
-                                    true,
-                                  ) as List)
-                                      .map<String>((s) => s.toString())
-                                      .toList()
-                                      .where((option) {
-                                    final lowercaseOption =
-                                        option.toLowerCase();
-                                    return lowercaseOption.contains(
-                                        textEditingValue.text.toLowerCase());
-                                  });
-                                },
-                                optionsViewBuilder:
-                                    (context, onSelected, options) {
-                                  return AutocompleteOptionsList(
-                                    textFieldKey: _model.searchBarKey,
-                                    textController:
-                                        _model.searchBarTextController!,
-                                    options: options.toList(),
-                                    onSelected: onSelected,
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
-                                    textHighlightStyle: const TextStyle(),
-                                    elevation: 4.0,
-                                    optionBackgroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                    optionHighlightColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                    maxHeight: 200.0,
-                                  );
-                                },
-                                onSelected: (String selection) {
-                                  setState(() => _model
-                                      .searchBarSelectedOption = selection);
-                                  FocusScope.of(context).unfocus();
-                                },
-                                fieldViewBuilder: (
-                                  context,
-                                  textEditingController,
-                                  focusNode,
-                                  onEditingComplete,
-                                ) {
-                                  _model.searchBarFocusNode = focusNode;
-
-                                  _model.searchBarTextController =
-                                      textEditingController;
-                                  return TextFormField(
-                                    key: _model.searchBarKey,
-                                    controller: textEditingController,
-                                    focusNode: focusNode,
-                                    onEditingComplete: onEditingComplete,
-                                    textCapitalization:
-                                        TextCapitalization.words,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Search for the product',
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            letterSpacing: 0.0,
-                                          ),
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            letterSpacing: 0.0,
-                                          ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              24.0, 24.0, 20.0, 24.0),
-                                      prefixIcon: Icon(
-                                        Icons.search,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        size: 16.0,
-                                      ),
-                                    ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
-                                    validator: _model
-                                        .searchBarTextControllerValidator
-                                        .asValidator(context),
-                                  );
-                                },
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    ),
-                    Align(
-                      alignment: const AlignmentDirectional(-1.0, -1.0),
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).secondaryText,
-                          borderRadius: 5.0,
-                          borderWidth: 1.0,
-                          buttonSize: 55.0,
-                          icon: Icon(
-                            Icons.search,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 35.0,
+                            const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                        child: TextFormField(
+                          controller: _model.searchBarTextController,
+                          focusNode: _model.searchBarFocusNode,
+                          onChanged: (_) => EasyDebounce.debounce(
+                            '_model.searchBarTextController',
+                            const Duration(milliseconds: 300),
+                            () => setState(() {}),
                           ),
-                          onPressed: () {
-                            print('IconButton pressed ...');
-                          },
+                          autofocus: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Search for products...',
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
+                                ),
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
+                                ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).alternate,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            errorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            suffixIcon: _model
+                                    .searchBarTextController!.text.isNotEmpty
+                                ? InkWell(
+                                    onTap: () async {
+                                      _model.searchBarTextController?.clear();
+                                      setState(() {});
+                                    },
+                                    child: const Icon(
+                                      Icons.clear,
+                                      size: 22,
+                                    ),
+                                  )
+                                : null,
+                          ),
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    letterSpacing: 0.0,
+                                  ),
+                          validator: _model.searchBarTextControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                     ),
@@ -312,7 +201,9 @@ class _ProductsCopyWidgetState extends State<ProductsCopyWidget> {
                     },
                     child: PagedListView<ApiPagingParams, dynamic>(
                       pagingController: _model.setListViewController(
-                        (nextPageMarker) => GetProductsAPICall.call(),
+                        (nextPageMarker) => SearchProductByIDCall.call(
+                          id: _model.searchBarTextController.text,
+                        ),
                       ),
                       padding: EdgeInsets.zero,
                       primary: false,

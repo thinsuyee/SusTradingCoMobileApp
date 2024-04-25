@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '/backend/backend.dart';
+import '/backend/schema/structs/index.dart';
 
 import '/auth/base_auth_user_provider.dart';
 
@@ -71,16 +73,15 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
-      errorBuilder: (context, state) => appStateNotifier.loggedIn
-          ? const ProductsCopyWidget()
-          : const InventoryMainWidget(),
+      errorBuilder: (context, state) =>
+          appStateNotifier.loggedIn ? const ProductPageWidget() : const ProductListWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) => appStateNotifier.loggedIn
-              ? const ProductsCopyWidget()
-              : const InventoryMainWidget(),
+              ? const ProductPageWidget()
+              : const ProductListWidget(),
         ),
         FFRoute(
           name: 'Products',
@@ -108,9 +109,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => const HomeDashboardCustomerWidget(),
         ),
         FFRoute(
-          name: 'ProductsCopy',
-          path: '/productsCopy',
-          builder: (context, params) => const ProductsCopyWidget(),
+          name: 'ProductList',
+          path: '/ProductList',
+          builder: (context, params) => const ProductListWidget(),
         ),
         FFRoute(
           name: 'Profile',
@@ -138,14 +139,70 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           builder: (context, params) => const EditProfileWidget(),
         ),
         FFRoute(
-          name: 'ProductsCopy2',
-          path: '/productsCopy2',
-          builder: (context, params) => const ProductsCopy2Widget(),
+          name: 'ProductListing',
+          path: '/productTest',
+          builder: (context, params) => const ProductListingWidget(),
         ),
         FFRoute(
           name: 'InventoryMain',
           path: '/inventoryMain',
           builder: (context, params) => const InventoryMainWidget(),
+        ),
+        FFRoute(
+          name: 'ProductPage',
+          path: '/productPage',
+          builder: (context, params) => const ProductPageWidget(),
+        ),
+        FFRoute(
+          name: 'testProduct',
+          path: '/testProduct',
+          builder: (context, params) => const TestProductWidget(),
+        ),
+        FFRoute(
+          name: 'ProductDetails',
+          path: '/ProductDetails',
+          builder: (context, params) => ProductDetailsWidget(
+            name: params.getParam<String>(
+              'name',
+              ParamType.String,
+              true,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'ProductListCopy',
+          path: '/ProductListCopy',
+          builder: (context, params) => const ProductListCopyWidget(),
+        ),
+        FFRoute(
+          name: 'ProductsCopyCopyCopy',
+          path: '/productsCopyCopyCopy',
+          builder: (context, params) => const ProductsCopyCopyCopyWidget(),
+        ),
+        FFRoute(
+          name: 'ProductsCopy3Copy',
+          path: '/productsCopy3Copy',
+          builder: (context, params) => const ProductsCopy3CopyWidget(),
+        ),
+        FFRoute(
+          name: 'testProductDetails',
+          path: '/ProductDetailsCopy',
+          builder: (context, params) => TestProductDetailsWidget(
+            productID: params.getParam(
+              'productID',
+              ParamType.int,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'ProductDetailsPage',
+          path: '/productDetailsPage',
+          builder: (context, params) => ProductDetailsPageWidget(
+            id: params.getParam(
+              'id',
+              ParamType.String,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );
@@ -265,6 +322,7 @@ class FFParameters {
     ParamType type, [
     bool isList = false,
     List<String>? collectionNamePath,
+    StructBuilder<T>? structBuilder,
   ]) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
@@ -283,6 +341,7 @@ class FFParameters {
       type,
       isList,
       collectionNamePath: collectionNamePath,
+      structBuilder: structBuilder,
     );
   }
 }
@@ -316,7 +375,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/inventoryMain';
+            return '/ProductList';
           }
           return null;
         },

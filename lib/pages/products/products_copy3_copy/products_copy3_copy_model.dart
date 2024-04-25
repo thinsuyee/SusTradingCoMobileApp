@@ -1,11 +1,11 @@
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:async';
-import 'products_copy2_widget.dart' show ProductsCopy2Widget;
+import 'products_copy3_copy_widget.dart' show ProductsCopy3CopyWidget;
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class ProductsCopy2Model extends FlutterFlowModel<ProductsCopy2Widget> {
+class ProductsCopy3CopyModel extends FlutterFlowModel<ProductsCopy3CopyWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
@@ -58,11 +58,12 @@ class ProductsCopy2Model extends FlutterFlowModel<ProductsCopy2Widget> {
                   listViewGetProductsResponse.jsonBody,
                 )! ??
                 [])
+            .take(10 - nextPageMarker.numItems)
             .toList();
         final newNumItems = nextPageMarker.numItems + pageItems.length;
         listViewPagingController?.appendPage(
           pageItems,
-          (pageItems.isNotEmpty)
+          (pageItems.isNotEmpty) && newNumItems < 10
               ? ApiPagingParams(
                   nextPageNumber: nextPageMarker.nextPageNumber + 1,
                   numItems: newNumItems,

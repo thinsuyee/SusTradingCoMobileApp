@@ -30,18 +30,22 @@ class GetProductsCall {
       ) as List?;
 }
 
-class ProductAPICall {
-  static Future<ApiCallResponse> call() async {
+class SearchProductByIDCall {
+  static Future<ApiCallResponse> call({
+    String? id = '66213f0a2ed6b137c982fe18',
+  }) async {
     return ApiManager.instance.makeApiCall(
-      callName: 'ProductAPI',
-      apiUrl: 'https://373e-219-75-69-73.ngrok-free.app/api/product',
+      callName: 'SearchProductByID',
+      apiUrl:
+          'https://1d44-219-75-69-73.ngrok-free.app/api/product/query?id=$id',
       callType: ApiCallType.GET,
       headers: {
-        'Accept': 'application/json',
-        'Origin':
-            'https://ff-debug-service-frontend-pro-ygxkweukma-uc.a.run.app',
+        'Authorization':
+            'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJMTThmeFVtTjQwNmlPZnhFNGd2RWlxdEVUdFVySEdnZm84bUJ4cFNuUmI0In0.eyJleHAiOjE3MTM5NTM5NTUsImlhdCI6MTcxMzk1MzY1NSwiYXV0aF90aW1lIjoxNzEzOTUwOTMzLCJqdGkiOiJkMjA2OTIyYS03MmEyLTRjYTYtYjk1Yy02NTllMTQ2OTFjMWMiLCJpc3MiOiJodHRwOi8va2V5Y2xvYWs6ODA4MC9yZWFsbXMvU3VzQ29tcGFueVJlYWxtIiwiYXVkIjpbImJhY2tlbmQiLCJhY2NvdW50Il0sInN1YiI6IjNkNzE2MGI0LTc4OTgtNDFiMi04ODJlLTI1NTg5MDY5MzY3ZCIsInR5cCI6IkJlYXJlciIsImF6cCI6ImZyb250ZW5kIiwibm9uY2UiOiJlNzE0ZjUxYS04NTYyLTRjZGEtOWZlYy1iMmM0MzM3MWQwZjgiLCJzZXNzaW9uX3N0YXRlIjoiYzEwYTUwNjUtMDliOS00MWRmLThmMmYtNWRiZWQ1YTg3NmZlIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtc3VzY29tcGFueXJlYWxtIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJiYWNrZW5kIjp7InJvbGVzIjpbIlBST0RVQ1QtREVMRVRFIiwiSU5WRU5UT1JZLUNSRUFURSIsIk9SREVSLURFTEVURSIsIklOVkVOVE9SWS1VUERBVEUiLCJQUk9EVUNULVVQREFURSIsIlBST0RVQ1QtVklFVyIsIkFETUlOIiwiSU5WRU5UT1JZLURFTEVURSIsIlBST0RVQ1QtQ1JFQVRFIl19LCJmcm9udGVuZCI6eyJyb2xlcyI6WyJBRE1JTiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInNpZCI6ImMxMGE1MDY1LTA5YjktNDFkZi04ZjJmLTVkYmVkNWE4NzZmZSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Im1hcnkgdGFuIiwicHJlZmVycmVkX3VzZXJuYW1lIjoibWFyeSIsImdpdmVuX25hbWUiOiJtYXJ5IiwiZmFtaWx5X25hbWUiOiJ0YW4ifQ.PHjuaXIvxKuvscuqw5coQzZsoWw7IXrDRWX06vzcH5htmZdiyWmM3STBWjPuZ-sr9d1rOyMKRn6KCkStx3eeFhccnaRrWs3tiIeCorAxp8BOYPy6drNGfBbEj2RCCfYLloU-kKGROI4pFn-PLenFiXpT0lRUy1xnbu4PdPIKrILSQ7hWWDi4pbLW897EoaFBWMlslAC2khKRLPvbnFRpdZwZePyoODuvx4VhPb6Hl3716eok8KdgIEHezVwcQ4bKUextMHYhh7XX75kavn0HkWROYTzLmXgjP2u8nlMDzUl0gFVItnV6DgqCvgm_ZXc1sT-jyYVdgR_1A9gunmfXSQ',
       },
-      params: {},
+      params: {
+        'id': id,
+      },
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
@@ -179,29 +183,16 @@ class GetInventoryNotWorkingCall {
   }
 }
 
-class DeleteProductNotWorkingCall {
+class TestSearchCall {
   static Future<ApiCallResponse> call({
-    String? id = '6627ea4892dcda3154c8acfe',
+    String? searchValue = '',
   }) async {
-    const ffApiRequestBody = '''
-{
-  "id": "6627ea4892dcda3154c8acfe"
-}''';
     return ApiManager.instance.makeApiCall(
-      callName: 'deleteProduct NotWorking',
-      apiUrl:
-          'https://a671-103-6-150-177.ngrok-free.app/api/product/delete/$id',
-      callType: ApiCallType.POST,
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Accept-Encoding': 'gzip, deflate, br, zstd',
-        'Accept-Language': 'en-US,en;q=0.9',
-        'Authorization':
-            'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJLZEtYak9zNVNXMl9xVXBtQXZ4bThoZ0U1end3OWxzaFM0V19MQWxHZ3VJIn0.eyJleHAiOjE3MTM4OTI3MTIsImlhdCI6MTcxMzg5MjQxMiwiYXV0aF90aW1lIjoxNzEzODg3OTI4LCJqdGkiOiIyYjcwNzI1My1hNTI4LTQ3OGUtOGFlOS03NDdhMzE5N2ZiYjciLCJpc3MiOiJodHRwOi8va2V5Y2xvYWs6ODA4MC9yZWFsbXMvU3VzQ29tcGFueVJlYWxtIiwiYXVkIjpbImJhY2tlbmQiLCJhY2NvdW50Il0sInN1YiI6ImZiZDgyZDAzLTE0MjktNDIwOC04NzQ2LTI4NDQxNTQ2ZWQ5MSIsInR5cCI6IkJlYXJlciIsImF6cCI6ImZyb250ZW5kIiwibm9uY2UiOiJkMzAxZDBhNS0zYTg2LTQ5M2QtYmE5MC1jNWVjM2Q3NDY1MzQiLCJzZXNzaW9uX3N0YXRlIjoiMWE0ZjBhNzktM2MzMy00NWJkLWJjNDgtNTAwYjZiYTQ3ZDBkIiwiYWNyIjoiMCIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsImRlZmF1bHQtcm9sZXMtc3VzY29tcGFueXJlYWxtIiwidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJiYWNrZW5kIjp7InJvbGVzIjpbIlBST0RVQ1QtREVMRVRFIiwiSU5WRU5UT1JZLUNSRUFURSIsIk9SREVSLURFTEVURSIsIklOVkVOVE9SWS1VUERBVEUiLCJQUk9EVUNULVVQREFURSIsIlBST0RVQ1QtVklFVyIsIkFETUlOIiwiSU5WRU5UT1JZLURFTEVURSIsIlBST0RVQ1QtQ1JFQVRFIl19LCJmcm9udGVuZCI6eyJyb2xlcyI6WyJBRE1JTiJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJvcGVuaWQgcHJvZmlsZSBlbWFpbCIsInNpZCI6IjFhNGYwYTc5LTNjMzMtNDViZC1iYzQ4LTUwMGI2YmE0N2QwZCIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwicHJlZmVycmVkX3VzZXJuYW1lIjoiYmVhIn0.OQQYNVoh8IqQQdSvK6jGAlI4ztXe-RbcUw_RaOgMVhtl8vBobgB3FMnYZsibri-BkxHbX93_f-MYZxHjYlFhUBqsy_bSF7Wmth1DWZWj1wjKZwiNCTK7K03j_tjMRGURFMxECjw3qe4A5utVrAIMUhioxq6n9mLJOdbxj_Jc-T7SrufZZRVD7e_AC_SV6kRRJzBxL40ieTfeiKKSh7wDgqsaUY9fM-_RalkRq1NGgzq2-s64IBKy__lcnSZ5dx1NT_0SGojwZsf499Qz_T92YlU8CpFWfQMs-lf_DR_FsNqmtRPO7ws2BsKLUAuA1NQ48MBDKHQK2gwxDMBvgb6h3g',
-      },
+      callName: 'testSearch',
+      apiUrl: 'https://dummyjson.com/products/search?q=$searchValue',
+      callType: ApiCallType.GET,
+      headers: {},
       params: {},
-      body: ffApiRequestBody,
-      bodyType: BodyType.JSON,
       returnBody: true,
       encodeBodyUtf8: false,
       decodeUtf8: false,
@@ -210,10 +201,30 @@ class DeleteProductNotWorkingCall {
     );
   }
 
-  static String? test(dynamic response) => castToType<String>(getJsonField(
+  static List? productData(dynamic response) => getJsonField(
         response,
-        r'''$.path''',
-      ));
+        r'''$.products''',
+        true,
+      ) as List?;
+}
+
+class TestSingleProductCall {
+  static Future<ApiCallResponse> call({
+    int? productID,
+  }) async {
+    return ApiManager.instance.makeApiCall(
+      callName: 'test single product',
+      apiUrl: 'https://dummyjson.com/products/$productID',
+      callType: ApiCallType.GET,
+      headers: {},
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
 }
 
 class ApiPagingParams {

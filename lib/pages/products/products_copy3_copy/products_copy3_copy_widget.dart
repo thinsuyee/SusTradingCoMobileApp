@@ -6,25 +6,27 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'products_copy2_model.dart';
-export 'products_copy2_model.dart';
+import 'package:provider/provider.dart';
+import 'products_copy3_copy_model.dart';
+export 'products_copy3_copy_model.dart';
 
-class ProductsCopy2Widget extends StatefulWidget {
-  const ProductsCopy2Widget({super.key});
+class ProductsCopy3CopyWidget extends StatefulWidget {
+  const ProductsCopy3CopyWidget({super.key});
 
   @override
-  State<ProductsCopy2Widget> createState() => _ProductsCopy2WidgetState();
+  State<ProductsCopy3CopyWidget> createState() =>
+      _ProductsCopy3CopyWidgetState();
 }
 
-class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
-  late ProductsCopy2Model _model;
+class _ProductsCopy3CopyWidgetState extends State<ProductsCopy3CopyWidget> {
+  late ProductsCopy3CopyModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ProductsCopy2Model());
+    _model = createModel(context, () => ProductsCopy3CopyModel());
 
     _model.searchBarTextController ??= TextEditingController();
 
@@ -40,6 +42,8 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -258,28 +262,29 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                         ),
                       ),
                     ),
-                    Align(
-                      alignment: const AlignmentDirectional(-1.0, -1.0),
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).secondaryText,
-                          borderRadius: 5.0,
-                          borderWidth: 1.0,
-                          buttonSize: 55.0,
-                          icon: Icon(
-                            Icons.search,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 35.0,
+                    if (!FFAppState().searchActive)
+                      Align(
+                        alignment: const AlignmentDirectional(-1.0, -1.0),
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              0.0, 12.0, 0.0, 0.0),
+                          child: FlutterFlowIconButton(
+                            borderColor:
+                                FlutterFlowTheme.of(context).secondaryText,
+                            borderRadius: 5.0,
+                            borderWidth: 1.0,
+                            buttonSize: 55.0,
+                            icon: Icon(
+                              Icons.search,
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              size: 35.0,
+                            ),
+                            onPressed: () {
+                              print('searchResult pressed ...');
+                            },
                           ),
-                          onPressed: () {
-                            print('IconButton pressed ...');
-                          },
                         ),
                       ),
-                    ),
                   ],
                 ),
                 Row(
@@ -345,10 +350,10 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                           ),
                         ),
 
-                        itemBuilder: (context, _, productResultIndex) {
-                          final productResultItem = _model
+                        itemBuilder: (context, _, varProductsIndex) {
+                          final varProductsItem = _model
                               .listViewPagingController!
-                              .itemList![productResultIndex];
+                              .itemList![varProductsIndex];
                           return Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 8.0),
@@ -382,7 +387,7 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                             BorderRadius.circular(6.0),
                                         child: Image.network(
                                           getJsonField(
-                                            productResultItem,
+                                            varProductsItem,
                                             r'''$.images[0]''',
                                           ).toString(),
                                           width: 100.0,
@@ -411,7 +416,7 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                                         0.0, 0.0, 0.0, 30.0),
                                                 child: Text(
                                                   getJsonField(
-                                                    productResultItem,
+                                                    varProductsItem,
                                                     r'''$.title''',
                                                   ).toString(),
                                                   style: FlutterFlowTheme.of(
@@ -429,7 +434,7 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                                   -1.0, -1.0),
                                               child: Text(
                                                 getJsonField(
-                                                  productResultItem,
+                                                  varProductsItem,
                                                   r'''$.description''',
                                                 ).toString(),
                                                 style:
@@ -447,7 +452,7 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                                   .fromSTEB(0.0, 4.0, 8.0, 0.0),
                                               child: AutoSizeText(
                                                 getJsonField(
-                                                  productResultItem,
+                                                  varProductsItem,
                                                   r'''$.category''',
                                                 )
                                                     .toString()
@@ -493,7 +498,7 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                                   0.0, 25.0, 4.0, 8.0),
                                           child: Text(
                                             getJsonField(
-                                              productResultItem,
+                                              varProductsItem,
                                               r'''$.price''',
                                             ).toString(),
                                             textAlign: TextAlign.end,
