@@ -332,9 +332,7 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                               ),
                             ),
                           ),
-                          noItemsFoundIndicatorBuilder: (_) => Image.asset(
-                            'assets/images/2vqf7_',
-                          ),
+
                           itemBuilder: (context, _, productDataIndex) {
                             final productDataItem = _model
                                 .allProductListViewPagingController!

@@ -73,16 +73,14 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       initialLocation: '/',
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
-      errorBuilder: (context, state) => appStateNotifier.loggedIn
-          ? const ProductListWidget()
-          : const TestProductListWidget(),
+      errorBuilder: (context, state) =>
+          appStateNotifier.loggedIn ? const LoginWidget() : const ProductListWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
-          builder: (context, _) => appStateNotifier.loggedIn
-              ? const ProductListWidget()
-              : const TestProductListWidget(),
+          builder: (context, _) =>
+              appStateNotifier.loggedIn ? const LoginWidget() : const ProductListWidget(),
         ),
         FFRoute(
           name: 'AddUpdateInventory',
@@ -136,7 +134,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         ),
         FFRoute(
           name: 'testProductList',
-          path: '/productTest',
+          path: '/testProductList',
           builder: (context, params) => const TestProductListWidget(),
         ),
         FFRoute(
@@ -146,7 +144,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         ),
         FFRoute(
           name: 'ProductDetails',
-          path: '/productDetails',
+          path: '/ProductDetails',
           builder: (context, params) => ProductDetailsWidget(
             id: params.getParam(
               'id',
@@ -335,7 +333,7 @@ class FFRoute {
 
           if (requireAuth && !appStateNotifier.loggedIn) {
             appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
-            return '/productTest';
+            return '/ProductList';
           }
           return null;
         },
