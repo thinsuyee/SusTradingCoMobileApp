@@ -1,14 +1,11 @@
 import '/backend/api_requests/api_calls.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'package:text_search/text_search.dart';
 import 'product_list_model.dart';
 export 'product_list_model.dart';
 
@@ -240,30 +237,8 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                             color: FlutterFlowTheme.of(context).primaryText,
                             size: 35.0,
                           ),
-                          onPressed: () async {
-                            await queryProductsRecordOnce()
-                                .then(
-                                  (records) => _model
-                                      .simpleSearchResults = TextSearch(
-                                    records
-                                        .map(
-                                          (record) => TextSearchItem.fromTerms(
-                                              record, [record.name]),
-                                        )
-                                        .toList(),
-                                  )
-                                      .search(
-                                          _model.searchBarTextController.text)
-                                      .map((r) => r.object)
-                                      .toList(),
-                                )
-                                .onError(
-                                    (_, __) => _model.simpleSearchResults = [])
-                                .whenComplete(() => setState(() {}));
-
-                            setState(() {
-                              FFAppState().searchActive = false;
-                            });
+                          onPressed: () {
+                            print('IconButton pressed ...');
                           },
                         ),
                       ),
@@ -352,7 +327,10 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                                   'ProductDetailsPage',
                                   queryParameters: {
                                     'id': serializeParam(
-                                      '',
+                                      getJsonField(
+                                        productDataItem,
+                                        r'''$.id''',
+                                      ).toString(),
                                       ParamType.String,
                                     ),
                                   }.withoutNulls,
@@ -460,14 +438,6 @@ class _ProductListWidgetState extends State<ProductListWidget> {
                                             ],
                                           ),
                                         ),
-                                      ),
-                                      const Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [],
                                       ),
                                     ],
                                   ),
