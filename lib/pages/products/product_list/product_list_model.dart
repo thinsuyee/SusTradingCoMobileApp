@@ -1,5 +1,4 @@
 import '/backend/api_requests/api_calls.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:async';
 import 'product_list_widget.dart' show ProductListWidget;
@@ -16,7 +15,6 @@ class ProductListModel extends FlutterFlowModel<ProductListWidget> {
   TextEditingController? searchBarTextController;
   String? searchBarSelectedOption;
   String? Function(BuildContext, String?)? searchBarTextControllerValidator;
-  List<ProductsRecord> simpleSearchResults = [];
   // State field(s) for AllProductList widget.
 
   PagingController<ApiPagingParams, dynamic>? allProductListPagingController;
