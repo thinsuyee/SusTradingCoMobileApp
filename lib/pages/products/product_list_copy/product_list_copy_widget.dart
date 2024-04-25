@@ -10,25 +10,25 @@ import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 import 'package:provider/provider.dart';
 import 'package:text_search/text_search.dart';
-import 'products_copy_model.dart';
-export 'products_copy_model.dart';
+import 'product_list_copy_model.dart';
+export 'product_list_copy_model.dart';
 
-class ProductsCopyWidget extends StatefulWidget {
-  const ProductsCopyWidget({super.key});
+class ProductListCopyWidget extends StatefulWidget {
+  const ProductListCopyWidget({super.key});
 
   @override
-  State<ProductsCopyWidget> createState() => _ProductsCopyWidgetState();
+  State<ProductListCopyWidget> createState() => _ProductListCopyWidgetState();
 }
 
-class _ProductsCopyWidgetState extends State<ProductsCopyWidget> {
-  late ProductsCopyModel _model;
+class _ProductListCopyWidgetState extends State<ProductListCopyWidget> {
+  late ProductListCopyModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ProductsCopyModel());
+    _model = createModel(context, () => ProductListCopyModel());
 
     _model.searchBarTextController ??= TextEditingController();
 

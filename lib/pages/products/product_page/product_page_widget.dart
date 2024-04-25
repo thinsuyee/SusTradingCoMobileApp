@@ -6,25 +6,25 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'products_copy2_model.dart';
-export 'products_copy2_model.dart';
+import 'product_page_model.dart';
+export 'product_page_model.dart';
 
-class ProductsCopy2Widget extends StatefulWidget {
-  const ProductsCopy2Widget({super.key});
+class ProductPageWidget extends StatefulWidget {
+  const ProductPageWidget({super.key});
 
   @override
-  State<ProductsCopy2Widget> createState() => _ProductsCopy2WidgetState();
+  State<ProductPageWidget> createState() => _ProductPageWidgetState();
 }
 
-class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
-  late ProductsCopy2Model _model;
+class _ProductPageWidgetState extends State<ProductPageWidget> {
+  late ProductPageModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ProductsCopy2Model());
+    _model = createModel(context, () => ProductPageModel());
 
     _model.searchBarTextController ??= TextEditingController();
 
@@ -312,7 +312,7 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                     },
                     child: PagedListView<ApiPagingParams, dynamic>(
                       pagingController: _model.setListViewController(
-                        (nextPageMarker) => GetProductsCall.call(),
+                        (nextPageMarker) => GetProductsAPICall.call(),
                       ),
                       padding: EdgeInsets.zero,
                       primary: false,
@@ -345,10 +345,10 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                           ),
                         ),
 
-                        itemBuilder: (context, _, productResultIndex) {
-                          final productResultItem = _model
+                        itemBuilder: (context, _, productDataIndex) {
+                          final productDataItem = _model
                               .listViewPagingController!
-                              .itemList![productResultIndex];
+                              .itemList![productDataIndex];
                           return Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 8.0),
@@ -374,23 +374,6 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 1.0, 1.0, 1.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(6.0),
-                                        child: Image.network(
-                                          getJsonField(
-                                            productResultItem,
-                                            r'''$.images[0]''',
-                                          ).toString(),
-                                          width: 100.0,
-                                          height: 100.0,
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(
@@ -411,8 +394,8 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                                         0.0, 0.0, 0.0, 30.0),
                                                 child: Text(
                                                   getJsonField(
-                                                    productResultItem,
-                                                    r'''$.title''',
+                                                    productDataItem,
+                                                    r'''$.name''',
                                                   ).toString(),
                                                   style: FlutterFlowTheme.of(
                                                           context)
@@ -429,7 +412,7 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                                   -1.0, -1.0),
                                               child: Text(
                                                 getJsonField(
-                                                  productResultItem,
+                                                  productDataItem,
                                                   r'''$.description''',
                                                 ).toString(),
                                                 style:
@@ -447,8 +430,8 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                                   .fromSTEB(0.0, 4.0, 8.0, 0.0),
                                               child: AutoSizeText(
                                                 getJsonField(
-                                                  productResultItem,
-                                                  r'''$.category''',
+                                                  productDataItem,
+                                                  r'''$.price''',
                                                 )
                                                     .toString()
                                                     .maybeHandleOverflow(
@@ -470,14 +453,14 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                         ),
                                       ),
                                     ),
-                                    Column(
+                                    const Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        const Padding(
+                                        Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 0.0, 0.0),
@@ -485,24 +468,6 @@ class _ProductsCopy2WidgetState extends State<ProductsCopy2Widget> {
                                             Icons.chevron_right_rounded,
                                             color: Color(0xFF57636C),
                                             size: 24.0,
-                                          ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 25.0, 4.0, 8.0),
-                                          child: Text(
-                                            getJsonField(
-                                              productResultItem,
-                                              r'''$.price''',
-                                            ).toString(),
-                                            textAlign: TextAlign.end,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  letterSpacing: 0.0,
-                                                ),
                                           ),
                                         ),
                                       ],

@@ -1,11 +1,14 @@
 import '/backend/api_requests/api_calls.dart';
-import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import 'dart:async';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
+import 'package:provider/provider.dart';
+import 'package:text_search/text_search.dart';
 import 'products_model.dart';
 export 'products_model.dart';
 
@@ -26,7 +29,8 @@ class _ProductsWidgetState extends State<ProductsWidget> {
     super.initState();
     _model = createModel(context, () => ProductsModel());
 
-    _model.searchBarTextController ??= TextEditingController();
+    _model.textController ??= TextEditingController();
+    _model.textFieldFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -40,6 +44,8 @@ class _ProductsWidgetState extends State<ProductsWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -65,7 +71,7 @@ class _ProductsWidgetState extends State<ProductsWidget> {
             },
           ),
           title: Text(
-            'Products',
+            'Test Products',
             style: FlutterFlowTheme.of(context).titleMedium.override(
                   fontFamily: 'Readex Pro',
                   color: FlutterFlowTheme.of(context).secondary,
@@ -89,195 +95,117 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                     Expanded(
                       child: Padding(
                         padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: FutureBuilder<ApiCallResponse>(
-                          future: GetProductsCall.call(),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: SizedBox(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      FlutterFlowTheme.of(context).primary,
-                                    ),
-                                  ),
+                            const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                        child: TextFormField(
+                          controller: _model.textController,
+                          focusNode: _model.textFieldFocusNode,
+                          autofocus: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Label here...',
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
                                 ),
-                              );
-                            }
-                            final searchBarGetProductsResponse = snapshot.data!;
-                            return SizedBox(
-                              width: 30.0,
-                              child: Autocomplete<String>(
-                                initialValue: const TextEditingValue(),
-                                optionsBuilder: (textEditingValue) {
-                                  if (textEditingValue.text == '') {
-                                    return const Iterable<String>.empty();
-                                  }
-                                  return (getJsonField(
-                                    searchBarGetProductsResponse.jsonBody,
-                                    r'''$.title''',
-                                    true,
-                                  ) as List)
-                                      .map<String>((s) => s.toString())
-                                      .toList()
-                                      .where((option) {
-                                    final lowercaseOption =
-                                        option.toLowerCase();
-                                    return lowercaseOption.contains(
-                                        textEditingValue.text.toLowerCase());
-                                  });
-                                },
-                                optionsViewBuilder:
-                                    (context, onSelected, options) {
-                                  return AutocompleteOptionsList(
-                                    textFieldKey: _model.searchBarKey,
-                                    textController:
-                                        _model.searchBarTextController!,
-                                    options: options.toList(),
-                                    onSelected: onSelected,
-                                    textStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
-                                    textHighlightStyle: const TextStyle(),
-                                    elevation: 4.0,
-                                    optionBackgroundColor:
-                                        FlutterFlowTheme.of(context)
-                                            .primaryBackground,
-                                    optionHighlightColor:
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                    maxHeight: 200.0,
-                                  );
-                                },
-                                onSelected: (String selection) {
-                                  setState(() => _model
-                                      .searchBarSelectedOption = selection);
-                                  FocusScope.of(context).unfocus();
-                                },
-                                fieldViewBuilder: (
-                                  context,
-                                  textEditingController,
-                                  focusNode,
-                                  onEditingComplete,
-                                ) {
-                                  _model.searchBarFocusNode = focusNode;
-
-                                  _model.searchBarTextController =
-                                      textEditingController;
-                                  return TextFormField(
-                                    key: _model.searchBarKey,
-                                    controller: textEditingController,
-                                    focusNode: focusNode,
-                                    onEditingComplete: onEditingComplete,
-                                    textCapitalization:
-                                        TextCapitalization.words,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      labelText: 'Search for the product',
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            letterSpacing: 0.0,
-                                          ),
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            letterSpacing: 0.0,
-                                          ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      contentPadding:
-                                          const EdgeInsetsDirectional.fromSTEB(
-                                              24.0, 24.0, 20.0, 24.0),
-                                      prefixIcon: Icon(
-                                        Icons.search,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        size: 16.0,
-                                      ),
-                                    ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          letterSpacing: 0.0,
-                                        ),
-                                    validator: _model
-                                        .searchBarTextControllerValidator
-                                        .asValidator(context),
-                                  );
-                                },
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
+                                ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).alternate,
+                                width: 2.0,
                               ),
-                            );
-                          },
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            errorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                          ),
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    letterSpacing: 0.0,
+                                  ),
+                          validator: _model.textControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                     ),
-                    Align(
-                      alignment: const AlignmentDirectional(-1.0, -1.0),
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).secondaryText,
-                          borderRadius: 5.0,
-                          borderWidth: 1.0,
-                          buttonSize: 55.0,
-                          icon: Icon(
-                            Icons.search,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 35.0,
-                          ),
-                          onPressed: () {
-                            print('IconButton pressed ...');
-                          },
-                        ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        await queryProductsRecordOnce()
+                            .then(
+                              (records) => _model.simpleSearchResults =
+                                  TextSearch(
+                                records
+                                    .map(
+                                      (record) => TextSearchItem.fromTerms(
+                                          record,
+                                          [record.name, record.description]),
+                                    )
+                                    .toList(),
+                              )
+                                      .search(_model.textController.text)
+                                      .map((r) => r.object)
+                                      .toList(),
+                            )
+                            .onError((_, __) => _model.simpleSearchResults = [])
+                            .whenComplete(() => setState(() {}));
+
+                        setState(() {
+                          FFAppState().searchActive = false;
+                        });
+                      },
+                      child: Icon(
+                        Icons.search,
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        size: 40.0,
+                      ),
+                    ),
+                    InkWell(
+                      splashColor: Colors.transparent,
+                      focusColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () async {
+                        setState(() {
+                          FFAppState().searchActive = true;
+                        });
+                        setState(() {
+                          _model.textController?.clear();
+                        });
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        size: 40.0,
                       ),
                     ),
                   ],
@@ -302,221 +230,400 @@ class _ProductsWidgetState extends State<ProductsWidget> {
                     ),
                   ],
                 ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                  child: RefreshIndicator(
-                    onRefresh: () async {
-                      setState(
-                          () => _model.listViewPagingController?.refresh());
-                      await _model.waitForOnePageForListView();
-                    },
-                    child: PagedListView<ApiPagingParams, dynamic>(
-                      pagingController: _model.setListViewController(
-                        (nextPageMarker) => GetProductsCall.call(),
-                      ),
-                      padding: EdgeInsets.zero,
-                      primary: false,
-                      shrinkWrap: true,
-                      reverse: false,
-                      scrollDirection: Axis.vertical,
-                      builderDelegate: PagedChildBuilderDelegate<dynamic>(
-                        // Customize what your widget looks like when it's loading the first page.
-                        firstPageProgressIndicatorBuilder: (_) => Center(
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
+                if (FFAppState().searchActive)
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        setState(() =>
+                            _model.withoutSearchPagingController?.refresh());
+                        await _model.waitForOnePageForWithoutSearch();
+                      },
+                      child: PagedListView<ApiPagingParams, dynamic>(
+                        pagingController: _model.setWithoutSearchController(
+                          (nextPageMarker) => GetProductsCall.call(),
+                        ),
+                        padding: EdgeInsets.zero,
+                        primary: false,
+                        shrinkWrap: true,
+                        reverse: false,
+                        scrollDirection: Axis.vertical,
+                        builderDelegate: PagedChildBuilderDelegate<dynamic>(
+                          // Customize what your widget looks like when it's loading the first page.
+                          firstPageProgressIndicatorBuilder: (_) => Center(
+                            child: SizedBox(
+                              width: 50.0,
+                              height: 50.0,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  FlutterFlowTheme.of(context).primary,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        // Customize what your widget looks like when it's loading another page.
-                        newPageProgressIndicatorBuilder: (_) => Center(
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
+                          // Customize what your widget looks like when it's loading another page.
+                          newPageProgressIndicatorBuilder: (_) => Center(
+                            child: SizedBox(
+                              width: 50.0,
+                              height: 50.0,
+                              child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  FlutterFlowTheme.of(context).primary,
+                                ),
                               ),
                             ),
                           ),
-                        ),
 
-                        itemBuilder: (context, _, varProductsIndex) {
-                          final varProductsItem = _model
-                              .listViewPagingController!
-                              .itemList![varProductsIndex];
-                          return Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 0.0, 8.0),
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                boxShadow: const [
-                                  BoxShadow(
-                                    blurRadius: 3.0,
-                                    color: Color(0x411D2429),
-                                    offset: Offset(
-                                      0.0,
-                                      1.0,
-                                    ),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 1.0, 1.0, 1.0),
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(6.0),
-                                        child: Image.network(
-                                          getJsonField(
-                                            varProductsItem,
-                                            r'''$.images[0]''',
-                                          ).toString(),
-                                          width: 100.0,
-                                          height: 100.0,
-                                          fit: BoxFit.cover,
+                          itemBuilder: (context, _, varProductsIndex) {
+                            final varProductsItem = _model
+                                .withoutSearchPagingController!
+                                .itemList![varProductsIndex];
+                            return Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 8.0),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      blurRadius: 3.0,
+                                      color: Color(0x411D2429),
+                                      offset: Offset(
+                                        0.0,
+                                        1.0,
+                                      ),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 1.0, 1.0, 1.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(6.0),
+                                          child: Image.network(
+                                            getJsonField(
+                                              varProductsItem,
+                                              r'''$.images[0]''',
+                                            ).toString(),
+                                            width: 100.0,
+                                            height: 100.0,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsetsDirectional.fromSTEB(
-                                            8.0, 8.0, 4.0, 0.0),
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.max,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Align(
-                                              alignment: const AlignmentDirectional(
-                                                  -1.0, -1.0),
-                                              child: Padding(
-                                                padding: const EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 0.0, 30.0),
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                  8.0, 8.0, 4.0, 0.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Align(
+                                                alignment: const AlignmentDirectional(
+                                                    -1.0, -1.0),
+                                                child: Padding(
+                                                  padding: const EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          0.0, 0.0, 0.0, 30.0),
+                                                  child: Text(
+                                                    getJsonField(
+                                                      varProductsItem,
+                                                      r'''$.title''',
+                                                    ).toString(),
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily: 'Outfit',
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: const AlignmentDirectional(
+                                                    -1.0, -1.0),
                                                 child: Text(
                                                   getJsonField(
                                                     varProductsItem,
-                                                    r'''$.title''',
+                                                    r'''$.description''',
                                                   ).toString(),
                                                   style: FlutterFlowTheme.of(
                                                           context)
-                                                      .headlineSmall
+                                                      .bodyMedium
                                                       .override(
-                                                        fontFamily: 'Outfit',
+                                                        fontFamily:
+                                                            'Readex Pro',
                                                         letterSpacing: 0.0,
                                                       ),
                                                 ),
                                               ),
-                                            ),
-                                            Align(
-                                              alignment: const AlignmentDirectional(
-                                                  -1.0, -1.0),
-                                              child: Text(
-                                                getJsonField(
-                                                  varProductsItem,
-                                                  r'''$.description''',
-                                                ).toString(),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          letterSpacing: 0.0,
-                                                        ),
+                                              Padding(
+                                                padding: const EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 4.0, 8.0, 0.0),
+                                                child: AutoSizeText(
+                                                  getJsonField(
+                                                    varProductsItem,
+                                                    r'''$.category''',
+                                                  )
+                                                      .toString()
+                                                      .maybeHandleOverflow(
+                                                        maxChars: 70,
+                                                        replacement: '…',
+                                                      ),
+                                                  textAlign: TextAlign.start,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .labelMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsetsDirectional
-                                                  .fromSTEB(0.0, 4.0, 8.0, 0.0),
-                                              child: AutoSizeText(
-                                                getJsonField(
-                                                  varProductsItem,
-                                                  r'''$.category''',
-                                                )
-                                                    .toString()
-                                                    .maybeHandleOverflow(
-                                                      maxChars: 70,
-                                                      replacement: '…',
-                                                    ),
-                                                textAlign: TextAlign.start,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .labelMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                              ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        const Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 4.0, 0.0, 0.0),
-                                          child: Icon(
-                                            Icons.chevron_right_rounded,
-                                            color: Color(0xFF57636C),
-                                            size: 24.0,
+                                      Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          const Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 4.0, 0.0, 0.0),
+                                            child: Icon(
+                                              Icons.chevron_right_rounded,
+                                              color: Color(0xFF57636C),
+                                              size: 24.0,
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding:
-                                              const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 25.0, 4.0, 8.0),
-                                          child: Text(
-                                            getJsonField(
-                                              varProductsItem,
-                                              r'''$.price''',
-                                            ).toString(),
-                                            textAlign: TextAlign.end,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  letterSpacing: 0.0,
-                                                ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 25.0, 4.0, 8.0),
+                                            child: Text(
+                                              getJsonField(
+                                                varProductsItem,
+                                                r'''$.price''',
+                                              ).toString(),
+                                              textAlign: TextAlign.end,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                        ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
-                ),
+                if (!FFAppState().searchActive)
+                  Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+                    child: Builder(
+                      builder: (context) {
+                        final localSearch = _model.simpleSearchResults.toList();
+                        return ListView.builder(
+                          padding: EdgeInsets.zero,
+                          primary: false,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          itemCount: localSearch.length,
+                          itemBuilder: (context, localSearchIndex) {
+                            final localSearchItem =
+                                localSearch[localSearchIndex];
+                            return Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 0.0, 8.0),
+                              child: Container(
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      blurRadius: 3.0,
+                                      color: Color(0x411D2429),
+                                      offset: Offset(
+                                        0.0,
+                                        1.0,
+                                      ),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 1.0, 1.0, 1.0),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(6.0),
+                                          child: Image.network(
+                                            'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1760&q=80',
+                                            width: 100.0,
+                                            height: 100.0,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                  8.0, 8.0, 4.0, 0.0),
+                                          child: Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Align(
+                                                alignment: const AlignmentDirectional(
+                                                    -1.0, -1.0),
+                                                child: Padding(
+                                                  padding: const EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          0.0, 0.0, 0.0, 30.0),
+                                                  child: Text(
+                                                    localSearchItem.name,
+                                                    style: FlutterFlowTheme.of(
+                                                            context)
+                                                        .headlineSmall
+                                                        .override(
+                                                          fontFamily: 'Outfit',
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Align(
+                                                alignment: const AlignmentDirectional(
+                                                    -1.0, -1.0),
+                                                child: Text(
+                                                  localSearchItem.description,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 4.0, 8.0, 0.0),
+                                                child: AutoSizeText(
+                                                  localSearchItem.quantity
+                                                      .toString()
+                                                      .maybeHandleOverflow(
+                                                        maxChars: 70,
+                                                        replacement: '…',
+                                                      ),
+                                                  textAlign: TextAlign.start,
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .labelMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          const Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 4.0, 0.0, 0.0),
+                                            child: Icon(
+                                              Icons.chevron_right_rounded,
+                                              color: Color(0xFF57636C),
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding:
+                                                const EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 25.0, 4.0, 8.0),
+                                            child: Text(
+                                              localSearchItem.price.toString(),
+                                              textAlign: TextAlign.end,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
               ],
             ),
           ),

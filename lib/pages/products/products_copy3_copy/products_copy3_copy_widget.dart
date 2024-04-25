@@ -6,25 +6,27 @@ import '/flutter_flow/flutter_flow_util.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'products_copy_copy_model.dart';
-export 'products_copy_copy_model.dart';
+import 'package:provider/provider.dart';
+import 'products_copy3_copy_model.dart';
+export 'products_copy3_copy_model.dart';
 
-class ProductsCopyCopyWidget extends StatefulWidget {
-  const ProductsCopyCopyWidget({super.key});
+class ProductsCopy3CopyWidget extends StatefulWidget {
+  const ProductsCopy3CopyWidget({super.key});
 
   @override
-  State<ProductsCopyCopyWidget> createState() => _ProductsCopyCopyWidgetState();
+  State<ProductsCopy3CopyWidget> createState() =>
+      _ProductsCopy3CopyWidgetState();
 }
 
-class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
-  late ProductsCopyCopyModel _model;
+class _ProductsCopy3CopyWidgetState extends State<ProductsCopy3CopyWidget> {
+  late ProductsCopy3CopyModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => ProductsCopyCopyModel());
+    _model = createModel(context, () => ProductsCopy3CopyModel());
 
     _model.searchBarTextController ??= TextEditingController();
 
@@ -40,6 +42,8 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<FFAppState>();
+
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -258,28 +262,29 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                         ),
                       ),
                     ),
-                    Align(
-                      alignment: const AlignmentDirectional(-1.0, -1.0),
-                      child: Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-                        child: FlutterFlowIconButton(
-                          borderColor:
-                              FlutterFlowTheme.of(context).secondaryText,
-                          borderRadius: 5.0,
-                          borderWidth: 1.0,
-                          buttonSize: 55.0,
-                          icon: Icon(
-                            Icons.search,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 35.0,
+                    if (!FFAppState().searchActive)
+                      Align(
+                        alignment: const AlignmentDirectional(-1.0, -1.0),
+                        child: Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(
+                              0.0, 12.0, 0.0, 0.0),
+                          child: FlutterFlowIconButton(
+                            borderColor:
+                                FlutterFlowTheme.of(context).secondaryText,
+                            borderRadius: 5.0,
+                            borderWidth: 1.0,
+                            buttonSize: 55.0,
+                            icon: Icon(
+                              Icons.search,
+                              color: FlutterFlowTheme.of(context).primaryText,
+                              size: 35.0,
+                            ),
+                            onPressed: () {
+                              print('searchResult pressed ...');
+                            },
                           ),
-                          onPressed: () {
-                            print('IconButton pressed ...');
-                          },
                         ),
                       ),
-                    ),
                   ],
                 ),
                 Row(
@@ -312,7 +317,7 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                     },
                     child: PagedListView<ApiPagingParams, dynamic>(
                       pagingController: _model.setListViewController(
-                        (nextPageMarker) => GetProductsAPICall.call(),
+                        (nextPageMarker) => GetProductsCall.call(),
                       ),
                       padding: EdgeInsets.zero,
                       primary: false,
@@ -345,10 +350,10 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                           ),
                         ),
 
-                        itemBuilder: (context, _, productDataIndex) {
-                          final productDataItem = _model
+                        itemBuilder: (context, _, varProductsIndex) {
+                          final varProductsItem = _model
                               .listViewPagingController!
-                              .itemList![productDataIndex];
+                              .itemList![varProductsIndex];
                           return Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 8.0),
@@ -374,6 +379,23 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
+                                    Padding(
+                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                          0.0, 1.0, 1.0, 1.0),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(6.0),
+                                        child: Image.network(
+                                          getJsonField(
+                                            varProductsItem,
+                                            r'''$.images[0]''',
+                                          ).toString(),
+                                          width: 100.0,
+                                          height: 100.0,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsetsDirectional.fromSTEB(
@@ -394,8 +416,8 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                                                         0.0, 0.0, 0.0, 30.0),
                                                 child: Text(
                                                   getJsonField(
-                                                    productDataItem,
-                                                    r'''$.name''',
+                                                    varProductsItem,
+                                                    r'''$.title''',
                                                   ).toString(),
                                                   style: FlutterFlowTheme.of(
                                                           context)
@@ -412,7 +434,7 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                                                   -1.0, -1.0),
                                               child: Text(
                                                 getJsonField(
-                                                  productDataItem,
+                                                  varProductsItem,
                                                   r'''$.description''',
                                                 ).toString(),
                                                 style:
@@ -430,8 +452,8 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                                                   .fromSTEB(0.0, 4.0, 8.0, 0.0),
                                               child: AutoSizeText(
                                                 getJsonField(
-                                                  productDataItem,
-                                                  r'''$.price''',
+                                                  varProductsItem,
+                                                  r'''$.category''',
                                                 )
                                                     .toString()
                                                     .maybeHandleOverflow(
@@ -453,14 +475,14 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                                         ),
                                       ),
                                     ),
-                                    const Column(
+                                    Column(
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.end,
                                       children: [
-                                        Padding(
+                                        const Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   0.0, 4.0, 0.0, 0.0),
@@ -468,6 +490,24 @@ class _ProductsCopyCopyWidgetState extends State<ProductsCopyCopyWidget> {
                                             Icons.chevron_right_rounded,
                                             color: Color(0xFF57636C),
                                             size: 24.0,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 25.0, 4.0, 8.0),
+                                          child: Text(
+                                            getJsonField(
+                                              varProductsItem,
+                                              r'''$.price''',
+                                            ).toString(),
+                                            textAlign: TextAlign.end,
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .override(
+                                                  fontFamily: 'Readex Pro',
+                                                  letterSpacing: 0.0,
+                                                ),
                                           ),
                                         ),
                                       ],

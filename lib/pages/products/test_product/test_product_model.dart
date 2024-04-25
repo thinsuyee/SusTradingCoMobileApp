@@ -1,12 +1,11 @@
 import '/backend/api_requests/api_calls.dart';
-import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:async';
-import 'products_widget.dart' show ProductsWidget;
+import 'test_product_widget.dart' show TestProductWidget;
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class ProductsModel extends FlutterFlowModel<ProductsWidget> {
+class TestProductModel extends FlutterFlowModel<TestProductWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
@@ -14,11 +13,10 @@ class ProductsModel extends FlutterFlowModel<ProductsWidget> {
   FocusNode? textFieldFocusNode;
   TextEditingController? textController;
   String? Function(BuildContext, String?)? textControllerValidator;
-  List<ProductsRecord> simpleSearchResults = [];
-  // State field(s) for withoutSearch widget.
+  // State field(s) for ListView widget.
 
-  PagingController<ApiPagingParams, dynamic>? withoutSearchPagingController;
-  Function(ApiPagingParams nextPageMarker)? withoutSearchApiCall;
+  PagingController<ApiPagingParams, dynamic>? listViewPagingController;
+  Function(ApiPagingParams nextPageMarker)? listViewApiCall;
 
   @override
   void initState(BuildContext context) {}
@@ -29,19 +27,18 @@ class ProductsModel extends FlutterFlowModel<ProductsWidget> {
     textFieldFocusNode?.dispose();
     textController?.dispose();
 
-    withoutSearchPagingController?.dispose();
+    listViewPagingController?.dispose();
   }
 
   /// Additional helper methods.
-  PagingController<ApiPagingParams, dynamic> setWithoutSearchController(
+  PagingController<ApiPagingParams, dynamic> setListViewController(
     Function(ApiPagingParams) apiCall,
   ) {
-    withoutSearchApiCall = apiCall;
-    return withoutSearchPagingController ??=
-        _createWithoutSearchController(apiCall);
+    listViewApiCall = apiCall;
+    return listViewPagingController ??= _createListViewController(apiCall);
   }
 
-  PagingController<ApiPagingParams, dynamic> _createWithoutSearchController(
+  PagingController<ApiPagingParams, dynamic> _createListViewController(
     Function(ApiPagingParams) query,
   ) {
     final controller = PagingController<ApiPagingParams, dynamic>(
@@ -51,32 +48,31 @@ class ProductsModel extends FlutterFlowModel<ProductsWidget> {
         lastResponse: null,
       ),
     );
-    return controller..addPageRequestListener(withoutSearchGetProductsPage);
+    return controller..addPageRequestListener(listViewGetProductsPage);
   }
 
-  void withoutSearchGetProductsPage(ApiPagingParams nextPageMarker) =>
-      withoutSearchApiCall!(nextPageMarker)
-          .then((withoutSearchGetProductsResponse) {
+  void listViewGetProductsPage(ApiPagingParams nextPageMarker) =>
+      listViewApiCall!(nextPageMarker).then((listViewGetProductsResponse) {
         final pageItems = (GetProductsCall.products(
-                  withoutSearchGetProductsResponse.jsonBody,
+                  listViewGetProductsResponse.jsonBody,
                 )! ??
                 [])
-            .take(5 - nextPageMarker.numItems)
+            .take(10 - nextPageMarker.numItems)
             .toList();
         final newNumItems = nextPageMarker.numItems + pageItems.length;
-        withoutSearchPagingController?.appendPage(
+        listViewPagingController?.appendPage(
           pageItems,
-          (pageItems.isNotEmpty) && newNumItems < 5
+          (pageItems.isNotEmpty) && newNumItems < 10
               ? ApiPagingParams(
                   nextPageNumber: nextPageMarker.nextPageNumber + 1,
                   numItems: newNumItems,
-                  lastResponse: withoutSearchGetProductsResponse,
+                  lastResponse: listViewGetProductsResponse,
                 )
               : null,
         );
       });
 
-  Future waitForOnePageForWithoutSearch({
+  Future waitForOnePageForListView({
     double minWait = 0,
     double maxWait = double.infinity,
   }) async {
@@ -85,7 +81,7 @@ class ProductsModel extends FlutterFlowModel<ProductsWidget> {
       await Future.delayed(const Duration(milliseconds: 50));
       final timeElapsed = stopwatch.elapsedMilliseconds;
       final requestComplete =
-          (withoutSearchPagingController?.nextPageKey?.nextPageNumber ?? 0) > 0;
+          (listViewPagingController?.nextPageKey?.nextPageNumber ?? 0) > 0;
       if (timeElapsed > maxWait || (requestComplete && timeElapsed > minWait)) {
         break;
       }

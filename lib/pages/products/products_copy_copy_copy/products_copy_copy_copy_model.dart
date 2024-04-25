@@ -1,19 +1,18 @@
 import '/backend/api_requests/api_calls.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:async';
-import 'products_copy_copy_widget.dart' show ProductsCopyCopyWidget;
+import 'products_copy_copy_copy_widget.dart' show ProductsCopyCopyCopyWidget;
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class ProductsCopyCopyModel extends FlutterFlowModel<ProductsCopyCopyWidget> {
+class ProductsCopyCopyCopyModel
+    extends FlutterFlowModel<ProductsCopyCopyCopyWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
   // State field(s) for searchBar widget.
-  final searchBarKey = GlobalKey();
   FocusNode? searchBarFocusNode;
   TextEditingController? searchBarTextController;
-  String? searchBarSelectedOption;
   String? Function(BuildContext, String?)? searchBarTextControllerValidator;
   // State field(s) for ListView widget.
 
@@ -27,6 +26,7 @@ class ProductsCopyCopyModel extends FlutterFlowModel<ProductsCopyCopyWidget> {
   void dispose() {
     unfocusNode.dispose();
     searchBarFocusNode?.dispose();
+    searchBarTextController?.dispose();
 
     listViewPagingController?.dispose();
   }
@@ -49,13 +49,14 @@ class ProductsCopyCopyModel extends FlutterFlowModel<ProductsCopyCopyWidget> {
         lastResponse: null,
       ),
     );
-    return controller..addPageRequestListener(listViewGetProductsAPIPage);
+    return controller..addPageRequestListener(listViewSearchProductByIDPage);
   }
 
-  void listViewGetProductsAPIPage(ApiPagingParams nextPageMarker) =>
-      listViewApiCall!(nextPageMarker).then((listViewGetProductsAPIResponse) {
+  void listViewSearchProductByIDPage(ApiPagingParams nextPageMarker) =>
+      listViewApiCall!(nextPageMarker)
+          .then((listViewSearchProductByIDResponse) {
         final pageItems =
-            (listViewGetProductsAPIResponse.jsonBody ?? []).toList() as List;
+            (listViewSearchProductByIDResponse.jsonBody ?? []).toList() as List;
         final newNumItems = nextPageMarker.numItems + pageItems.length;
         listViewPagingController?.appendPage(
           pageItems,
@@ -63,7 +64,7 @@ class ProductsCopyCopyModel extends FlutterFlowModel<ProductsCopyCopyWidget> {
               ? ApiPagingParams(
                   nextPageNumber: nextPageMarker.nextPageNumber + 1,
                   numItems: newNumItems,
-                  lastResponse: listViewGetProductsAPIResponse,
+                  lastResponse: listViewSearchProductByIDResponse,
                 )
               : null,
         );

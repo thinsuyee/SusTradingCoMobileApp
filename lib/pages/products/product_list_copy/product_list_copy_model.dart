@@ -2,11 +2,11 @@ import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:async';
-import 'products_copy_widget.dart' show ProductsCopyWidget;
+import 'product_list_copy_widget.dart' show ProductListCopyWidget;
 import 'package:flutter/material.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
-class ProductsCopyModel extends FlutterFlowModel<ProductsCopyWidget> {
+class ProductListCopyModel extends FlutterFlowModel<ProductListCopyWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
