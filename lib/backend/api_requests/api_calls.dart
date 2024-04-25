@@ -54,7 +54,7 @@ class SearchProductByIDCall {
     );
   }
 
-  static List? products(dynamic response) => getJsonField(
+  static List? singleProductName(dynamic response) => getJsonField(
         response,
         r'''$.name''',
         true,
