@@ -1,4 +1,5 @@
 import '/backend/api_requests/api_calls.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:async';
 import 'product_list_widget.dart' show ProductListWidget;
@@ -15,10 +16,12 @@ class ProductListModel extends FlutterFlowModel<ProductListWidget> {
   TextEditingController? searchBarTextController;
   String? searchBarSelectedOption;
   String? Function(BuildContext, String?)? searchBarTextControllerValidator;
-  // State field(s) for AllProductList widget.
+  List<ProductsRecord> simpleSearchResults = [];
+  // State field(s) for AllProductListView widget.
 
-  PagingController<ApiPagingParams, dynamic>? allProductListPagingController;
-  Function(ApiPagingParams nextPageMarker)? allProductListApiCall;
+  PagingController<ApiPagingParams, dynamic>?
+      allProductListViewPagingController;
+  Function(ApiPagingParams nextPageMarker)? allProductListViewApiCall;
 
   @override
   void initState(BuildContext context) {}
@@ -28,19 +31,20 @@ class ProductListModel extends FlutterFlowModel<ProductListWidget> {
     unfocusNode.dispose();
     searchBarFocusNode?.dispose();
 
-    allProductListPagingController?.dispose();
+    allProductListViewPagingController?.dispose();
   }
 
   /// Additional helper methods.
-  PagingController<ApiPagingParams, dynamic> setAllProductListController(
+  PagingController<ApiPagingParams, dynamic> setAllProductListViewController(
     Function(ApiPagingParams) apiCall,
   ) {
-    allProductListApiCall = apiCall;
-    return allProductListPagingController ??=
-        _createAllProductListController(apiCall);
+    allProductListViewApiCall = apiCall;
+    return allProductListViewPagingController ??=
+        _createAllProductListViewController(apiCall);
   }
 
-  PagingController<ApiPagingParams, dynamic> _createAllProductListController(
+  PagingController<ApiPagingParams, dynamic>
+      _createAllProductListViewController(
     Function(ApiPagingParams) query,
   ) {
     final controller = PagingController<ApiPagingParams, dynamic>(
@@ -50,28 +54,30 @@ class ProductListModel extends FlutterFlowModel<ProductListWidget> {
         lastResponse: null,
       ),
     );
-    return controller..addPageRequestListener(allProductListGetProductsAPIPage);
+    return controller
+      ..addPageRequestListener(allProductListViewGetProductsAPIPage);
   }
 
-  void allProductListGetProductsAPIPage(ApiPagingParams nextPageMarker) =>
-      allProductListApiCall!(nextPageMarker)
-          .then((allProductListGetProductsAPIResponse) {
-        final pageItems = (allProductListGetProductsAPIResponse.jsonBody ?? [])
-            .toList() as List;
+  void allProductListViewGetProductsAPIPage(ApiPagingParams nextPageMarker) =>
+      allProductListViewApiCall!(nextPageMarker)
+          .then((allProductListViewGetProductsAPIResponse) {
+        final pageItems =
+            (allProductListViewGetProductsAPIResponse.jsonBody ?? []).toList()
+                as List;
         final newNumItems = nextPageMarker.numItems + pageItems.length;
-        allProductListPagingController?.appendPage(
+        allProductListViewPagingController?.appendPage(
           pageItems,
           (pageItems.isNotEmpty)
               ? ApiPagingParams(
                   nextPageNumber: nextPageMarker.nextPageNumber + 1,
                   numItems: newNumItems,
-                  lastResponse: allProductListGetProductsAPIResponse,
+                  lastResponse: allProductListViewGetProductsAPIResponse,
                 )
               : null,
         );
       });
 
-  Future waitForOnePageForAllProductList({
+  Future waitForOnePageForAllProductListView({
     double minWait = 0,
     double maxWait = double.infinity,
   }) async {
@@ -80,7 +86,8 @@ class ProductListModel extends FlutterFlowModel<ProductListWidget> {
       await Future.delayed(const Duration(milliseconds: 50));
       final timeElapsed = stopwatch.elapsedMilliseconds;
       final requestComplete =
-          (allProductListPagingController?.nextPageKey?.nextPageNumber ?? 0) >
+          (allProductListViewPagingController?.nextPageKey?.nextPageNumber ??
+                  0) >
               0;
       if (timeElapsed > maxWait || (requestComplete && timeElapsed > minWait)) {
         break;

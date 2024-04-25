@@ -3,42 +3,27 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
-import 'test_product_model.dart';
-export 'test_product_model.dart';
+import 'test_product_list_model.dart';
+export 'test_product_list_model.dart';
 
-class TestProductWidget extends StatefulWidget {
-  const TestProductWidget({super.key});
+class TestProductListWidget extends StatefulWidget {
+  const TestProductListWidget({super.key});
 
   @override
-  State<TestProductWidget> createState() => _TestProductWidgetState();
+  State<TestProductListWidget> createState() => _TestProductListWidgetState();
 }
 
-class _TestProductWidgetState extends State<TestProductWidget> {
-  late TestProductModel _model;
+class _TestProductListWidgetState extends State<TestProductListWidget> {
+  late TestProductListModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
     super.initState();
-    _model = createModel(context, () => TestProductModel());
-
-    // On page load action.
-    SchedulerBinding.instance.addPostFrameCallback((_) async {
-      context.pushNamed(
-        'testProductDetails',
-        queryParameters: {
-          'productID': serializeParam(
-            0,
-            ParamType.int,
-          ),
-        }.withoutNulls,
-      );
-    });
+    _model = createModel(context, () => TestProductListModel());
 
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
@@ -80,7 +65,7 @@ class _TestProductWidgetState extends State<TestProductWidget> {
             },
           ),
           title: Text(
-            'Product List',
+            'Products',
             style: FlutterFlowTheme.of(context).titleMedium.override(
                   fontFamily: 'Readex Pro',
                   color: FlutterFlowTheme.of(context).secondary,
@@ -98,10 +83,6 @@ class _TestProductWidgetState extends State<TestProductWidget> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                const Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [],
-                ),
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
@@ -109,98 +90,83 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                       child: Padding(
                         padding:
                             const EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
-                        child: FutureBuilder<ApiCallResponse>(
-                          future: SearchProductByIDCall.call(
-                            id: _model.textController.text,
+                        child: TextFormField(
+                          controller: _model.textController,
+                          focusNode: _model.textFieldFocusNode,
+                          autofocus: true,
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Label here...',
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
+                                ),
+                            hintStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Readex Pro',
+                                  letterSpacing: 0.0,
+                                ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).alternate,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).primary,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            errorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            focusedErrorBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).error,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
                           ),
-                          builder: (context, snapshot) {
-                            // Customize what your widget looks like when it's loading.
-                            if (!snapshot.hasData) {
-                              return Center(
-                                child: SizedBox(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      FlutterFlowTheme.of(context).primary,
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }
-                            final textFieldSearchProductByIDResponse =
-                                snapshot.data!;
-                            return TextFormField(
-                              controller: _model.textController,
-                              focusNode: _model.textFieldFocusNode,
-                              onChanged: (_) => EasyDebounce.debounce(
-                                '_model.textController',
-                                const Duration(milliseconds: 300),
-                                () => setState(() {}),
-                              ),
-                              autofocus: true,
-                              obscureText: false,
-                              decoration: InputDecoration(
-                                labelText: 'Label here...',
-                                labelStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Readex Pro',
-                                      letterSpacing: 0.0,
-                                    ),
-                                hintStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Readex Pro',
-                                      letterSpacing: 0.0,
-                                    ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color:
-                                        FlutterFlowTheme.of(context).alternate,
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).error,
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                focusedErrorBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                    color: FlutterFlowTheme.of(context).error,
-                                    width: 2.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
                                     fontFamily: 'Readex Pro',
                                     letterSpacing: 0.0,
                                   ),
-                              validator: _model.textControllerValidator
-                                  .asValidator(context),
-                            );
-                          },
+                          validator: _model.textControllerValidator
+                              .asValidator(context),
                         ),
                       ),
                     ),
-                    Icon(
-                      Icons.search_sharp,
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                      size: 24.0,
+                  ],
+                ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Align(
+                      alignment: const AlignmentDirectional(-1.0, 0.0),
+                      child: Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                        child: Text(
+                          'All products',
+                          style:
+                              FlutterFlowTheme.of(context).labelMedium.override(
+                                    fontFamily: 'Readex Pro',
+                                    letterSpacing: 0.0,
+                                  ),
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -214,7 +180,7 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                     },
                     child: PagedListView<ApiPagingParams, dynamic>(
                       pagingController: _model.setListViewController(
-                        (nextPageMarker) => GetProductsCall.call(),
+                        (nextPageMarker) => TestGetProductsCall.call(),
                       ),
                       padding: EdgeInsets.zero,
                       primary: false,
@@ -247,10 +213,10 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                           ),
                         ),
 
-                        itemBuilder: (context, _, varProductsIndex) {
-                          final varProductsItem = _model
+                        itemBuilder: (context, _, productResultIndex) {
+                          final productResultItem = _model
                               .listViewPagingController!
-                              .itemList![varProductsIndex];
+                              .itemList![productResultIndex];
                           return Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0.0, 0.0, 0.0, 8.0),
@@ -265,7 +231,7 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                                   queryParameters: {
                                     'productID': serializeParam(
                                       getJsonField(
-                                        varProductsItem,
+                                        productResultItem,
                                         r'''$.id''',
                                       ),
                                       ParamType.int,
@@ -303,7 +269,7 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                                               BorderRadius.circular(6.0),
                                           child: Image.network(
                                             getJsonField(
-                                              varProductsItem,
+                                              productResultItem,
                                               r'''$.images[0]''',
                                             ).toString(),
                                             width: 100.0,
@@ -333,7 +299,7 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                                                           0.0, 0.0, 0.0, 30.0),
                                                   child: Text(
                                                     getJsonField(
-                                                      varProductsItem,
+                                                      productResultItem,
                                                       r'''$.title''',
                                                     ).toString(),
                                                     style: FlutterFlowTheme.of(
@@ -351,7 +317,7 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                                                     -1.0, -1.0),
                                                 child: Text(
                                                   getJsonField(
-                                                    varProductsItem,
+                                                    productResultItem,
                                                     r'''$.description''',
                                                   ).toString(),
                                                   style: FlutterFlowTheme.of(
@@ -370,7 +336,7 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                                                         0.0, 4.0, 8.0, 0.0),
                                                 child: AutoSizeText(
                                                   getJsonField(
-                                                    varProductsItem,
+                                                    productResultItem,
                                                     r'''$.category''',
                                                   )
                                                       .toString()
@@ -400,32 +366,14 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
-                                          Padding(
+                                          const Padding(
                                             padding:
-                                                const EdgeInsetsDirectional.fromSTEB(
+                                                EdgeInsetsDirectional.fromSTEB(
                                                     0.0, 4.0, 0.0, 0.0),
-                                            child: InkWell(
-                                              splashColor: Colors.transparent,
-                                              focusColor: Colors.transparent,
-                                              hoverColor: Colors.transparent,
-                                              highlightColor:
-                                                  Colors.transparent,
-                                              onTap: () async {
-                                                context.pushNamed(
-                                                  'testProductDetails',
-                                                  queryParameters: {
-                                                    'productID': serializeParam(
-                                                      varProductsItem,
-                                                      ParamType.int,
-                                                    ),
-                                                  }.withoutNulls,
-                                                );
-                                              },
-                                              child: const Icon(
-                                                Icons.chevron_right_rounded,
-                                                color: Color(0xFF57636C),
-                                                size: 24.0,
-                                              ),
+                                            child: Icon(
+                                              Icons.chevron_right_rounded,
+                                              color: Color(0xFF57636C),
+                                              size: 24.0,
                                             ),
                                           ),
                                           Padding(
@@ -434,7 +382,7 @@ class _TestProductWidgetState extends State<TestProductWidget> {
                                                     0.0, 25.0, 4.0, 8.0),
                                             child: Text(
                                               getJsonField(
-                                                varProductsItem,
+                                                productResultItem,
                                                 r'''$.price''',
                                               ).toString(),
                                               textAlign: TextAlign.end,

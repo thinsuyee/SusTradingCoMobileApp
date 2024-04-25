@@ -210,7 +210,7 @@ class _HomeDashboardAdminWidgetState extends State<HomeDashboardAdminWidget> {
                                           hoverColor: Colors.transparent,
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
-                                            context.pushNamed('Products');
+                                            context.pushNamed('ProductList');
                                           },
                                           child: Container(
                                             width: 80.0,
