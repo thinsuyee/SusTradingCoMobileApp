@@ -3,7 +3,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'login_model.dart';
 export 'login_model.dart';
 
@@ -42,8 +41,6 @@ class _LoginWidgetState extends State<LoginWidget> {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<FFAppState>();
-
     return GestureDetector(
       onTap: () => _model.unfocusNode.canRequestFocus
           ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -302,18 +299,20 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           snapshot.data!;
                                       return FFButtonWidget(
                                         onPressed: () async {
-                                          _model.apiRespondResult =
-                                              await GetProductsAPICall.call(
-                                            authtoken: FFAppState().authtoken,
+                                          _model.apiRespond =
+                                              await AccountCall.call(
+                                            username: _model
+                                                .emailAddressTextController
+                                                .text,
+                                            password: _model
+                                                .passwordTextController.text,
                                           );
-                                          if ((_model.apiRespondResult
-                                                  ?.succeeded ??
+                                          if ((_model.apiRespond?.succeeded ??
                                               true)) {
                                             setState(() {
                                               FFAppState().authtoken =
                                                   getJsonField(
-                                                (_model.apiRespondResult
-                                                        ?.jsonBody ??
+                                                (_model.apiRespond?.jsonBody ??
                                                     ''),
                                                 r'''$.access_token''',
                                               ).toString();
@@ -323,7 +322,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                 .showSnackBar(
                                               SnackBar(
                                                 content: Text(
-                                                  '\"Login Failed\"',
+                                                  '\"Failed Login\"',
                                                   style: TextStyle(
                                                     color: FlutterFlowTheme.of(
                                                             context)
