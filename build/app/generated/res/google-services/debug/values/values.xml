@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gcm_defaultSenderId" translatable="false">835453542101</string>
+    <string name="google_api_key" translatable="false">AIzaSyCdXwJV4Qdsjcni4ml9b6_7-WQa509RQ3w</string>
+    <string name="google_app_id" translatable="false">1:835453542101:android:5308981465c499d2294c5c</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyCdXwJV4Qdsjcni4ml9b6_7-WQa509RQ3w</string>
+    <string name="google_storage_bucket" translatable="false">sus-trading-co-9h84au.appspot.com</string>
+    <string name="project_id" translatable="false">sus-trading-co-9h84au</string>
+</resources>
