@@ -9,7 +9,14 @@ import 'inventory_main_model.dart';
 export 'inventory_main_model.dart';
 
 class InventoryMainWidget extends StatefulWidget {
-  const InventoryMainWidget({super.key});
+  const InventoryMainWidget({
+    super.key,
+    this.inventoryMainTitle,
+    bool? canAddItemToInventory,
+  }) : canAddItemToInventory = canAddItemToInventory ?? false;
+
+  final String? inventoryMainTitle;
+  final bool canAddItemToInventory;
 
   @override
   State<InventoryMainWidget> createState() => _InventoryMainWidgetState();
@@ -65,7 +72,10 @@ class _InventoryMainWidgetState extends State<InventoryMainWidget> {
             },
           ),
           title: Text(
-            'Inventory',
+            valueOrDefault<String>(
+              widget.inventoryMainTitle,
+              'Inventory',
+            ),
             style: FlutterFlowTheme.of(context).titleLarge.override(
                   fontFamily: 'Outfit',
                   letterSpacing: 0.0,
@@ -171,32 +181,33 @@ class _InventoryMainWidgetState extends State<InventoryMainWidget> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding:
-                          const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 12.0, 0.0),
-                      child: FlutterFlowIconButton(
-                        borderColor: Colors.transparent,
-                        borderRadius: 30.0,
-                        borderWidth: 1.0,
-                        buttonSize: 50.0,
-                        icon: Icon(
-                          Icons.add_circle,
-                          color: FlutterFlowTheme.of(context).primaryText,
-                          size: 30.0,
+                    if (widget.canAddItemToInventory)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            0.0, 12.0, 12.0, 0.0),
+                        child: FlutterFlowIconButton(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30.0,
+                          borderWidth: 1.0,
+                          buttonSize: 50.0,
+                          icon: Icon(
+                            Icons.add_circle,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 30.0,
+                          ),
+                          onPressed: () async {
+                            context.pushNamed(
+                              'AddUpdateInventory',
+                              queryParameters: {
+                                'inventoryTitle': serializeParam(
+                                  'Add New Item',
+                                  ParamType.String,
+                                ),
+                              }.withoutNulls,
+                            );
+                          },
                         ),
-                        onPressed: () async {
-                          context.pushNamed(
-                            'AddUpdateInventory',
-                            queryParameters: {
-                              'inventoryTitle': serializeParam(
-                                'Add New Item',
-                                ParamType.String,
-                              ),
-                            }.withoutNulls,
-                          );
-                        },
                       ),
-                    ),
                   ],
                 ),
                 Padding(
@@ -209,7 +220,7 @@ class _InventoryMainWidgetState extends State<InventoryMainWidget> {
                     },
                     child: PagedListView<ApiPagingParams, dynamic>(
                       pagingController: _model.setListViewController(
-                        (nextPageMarker) => GetProductsAPICall.call(),
+                        (nextPageMarker) => GetAllInventoryCall.call(),
                       ),
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,

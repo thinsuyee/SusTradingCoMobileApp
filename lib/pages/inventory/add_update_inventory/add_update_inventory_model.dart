@@ -9,10 +9,17 @@ class AddUpdateInventoryModel
 
   final unfocusNode = FocusNode();
   final formKey = GlobalKey<FormState>();
+  // State field(s) for DropDown widget.
+  String? dropDownValue;
+  FormFieldController<String>? dropDownValueController;
   // State field(s) for productName widget.
-  FocusNode? productNameFocusNode;
-  TextEditingController? productNameTextController;
-  String? Function(BuildContext, String?)? productNameTextControllerValidator;
+  FocusNode? productNameFocusNode1;
+  TextEditingController? productNameTextController1;
+  String? Function(BuildContext, String?)? productNameTextController1Validator;
+  // State field(s) for productName widget.
+  FocusNode? productNameFocusNode2;
+  TextEditingController? productNameTextController2;
+  String? Function(BuildContext, String?)? productNameTextController2Validator;
   // State field(s) for description widget.
   FocusNode? descriptionFocusNode;
   TextEditingController? descriptionTextController;
@@ -36,8 +43,11 @@ class AddUpdateInventoryModel
   @override
   void dispose() {
     unfocusNode.dispose();
-    productNameFocusNode?.dispose();
-    productNameTextController?.dispose();
+    productNameFocusNode1?.dispose();
+    productNameTextController1?.dispose();
+
+    productNameFocusNode2?.dispose();
+    productNameTextController2?.dispose();
 
     descriptionFocusNode?.dispose();
     descriptionTextController?.dispose();

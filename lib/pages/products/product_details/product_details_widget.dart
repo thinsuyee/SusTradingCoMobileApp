@@ -1,14 +1,10 @@
 import '/backend/api_requests/api_calls.dart';
-import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_count_controller.dart';
-import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/form_field_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'product_details_model.dart';
 export 'product_details_model.dart';
 
@@ -24,84 +20,15 @@ class ProductDetailsWidget extends StatefulWidget {
   State<ProductDetailsWidget> createState() => _ProductDetailsWidgetState();
 }
 
-class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
-    with TickerProviderStateMixin {
+class _ProductDetailsWidgetState extends State<ProductDetailsWidget> {
   late ProductDetailsModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => ProductDetailsModel());
-
-    animationsMap.addAll({
-      'textOnPageLoadAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          FadeEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 600.0.ms,
-            begin: 0.0,
-            end: 1.0,
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 600.0.ms,
-            begin: const Offset(0.0, 60.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-      'rowOnPageLoadAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          FadeEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 600.0.ms,
-            begin: 0.0,
-            end: 1.0,
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 600.0.ms,
-            begin: const Offset(0.0, 80.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-      'containerOnPageLoadAnimation': AnimationInfo(
-        trigger: AnimationTrigger.onPageLoad,
-        effectsBuilder: () => [
-          FadeEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 600.0.ms,
-            begin: 0.0,
-            end: 1.0,
-          ),
-          MoveEffect(
-            curve: Curves.easeInOut,
-            delay: 0.0.ms,
-            duration: 600.0.ms,
-            begin: const Offset(0.0, 140.0),
-            end: const Offset(0.0, 0.0),
-          ),
-        ],
-      ),
-    });
-    setupAnimations(
-      animationsMap.values.where((anim) =>
-          anim.trigger == AnimationTrigger.onActionTrigger ||
-          !anim.applyInitialState),
-      this,
-    );
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -159,7 +86,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
               },
             ),
             title: Text(
-              'Test Product Details',
+              'Product Details',
               style: FlutterFlowTheme.of(context).titleLarge.override(
                     fontFamily: 'Outfit',
                     color: FlutterFlowTheme.of(context).secondary,
@@ -225,8 +152,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                     fontFamily: 'Readex Pro',
                                     letterSpacing: 0.0,
                                   ),
-                        ).animateOnPageLoad(
-                            animationsMap['textOnPageLoadAnimation']!),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(
@@ -248,7 +174,49 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                     letterSpacing: 0.0,
                                   ),
                             ),
-                            Container(
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Material(
+                color: Colors.transparent,
+                elevation: 3.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(0.0),
+                ),
+                child: Container(
+                  width: double.infinity,
+                  height: 100.0,
+                  decoration: BoxDecoration(
+                    color: FlutterFlowTheme.of(context).primaryBackground,
+                    boxShadow: const [
+                      BoxShadow(
+                        blurRadius: 4.0,
+                        color: Color(0x320F1113),
+                        offset: Offset(
+                          0.0,
+                          -2.0,
+                        ),
+                      )
+                    ],
+                    borderRadius: BorderRadius.circular(0.0),
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 34.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Align(
+                          alignment: const AlignmentDirectional(-1.0, 0.0),
+                          child: Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(
+                                0.0, 0.0, 60.0, 0.0),
+                            child: Container(
                               width: 130.0,
                               height: 50.0,
                               decoration: BoxDecoration(
@@ -295,81 +263,6 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                                 minimum: 1,
                               ),
                             ),
-                          ],
-                        ).animateOnPageLoad(
-                            animationsMap['rowOnPageLoadAnimation']!),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Material(
-                color: Colors.transparent,
-                elevation: 3.0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(0.0),
-                ),
-                child: Container(
-                  width: double.infinity,
-                  height: 100.0,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).primaryBackground,
-                    boxShadow: const [
-                      BoxShadow(
-                        blurRadius: 4.0,
-                        color: Color(0x320F1113),
-                        offset: Offset(
-                          0.0,
-                          -2.0,
-                        ),
-                      )
-                    ],
-                    borderRadius: BorderRadius.circular(0.0),
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 34.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 12.0, 0.0),
-                            child: FlutterFlowDropDown<String>(
-                              controller: _model.dropDownValueController ??=
-                                  FormFieldController<String>(null),
-                              options: const ['Small', 'Medium', 'Large'],
-                              onChanged: (val) =>
-                                  setState(() => _model.dropDownValue = val),
-                              width: 130.0,
-                              height: 50.0,
-                              textStyle: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    fontFamily: 'Readex Pro',
-                                    letterSpacing: 0.0,
-                                  ),
-                              hintText: 'Select a Size',
-                              icon: const Icon(
-                                Icons.arrow_drop_down_rounded,
-                                color: Color(0xFF95A1AC),
-                                size: 15.0,
-                              ),
-                              fillColor: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              elevation: 2.0,
-                              borderColor: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              borderWidth: 2.0,
-                              borderRadius: 12.0,
-                              margin: const EdgeInsetsDirectional.fromSTEB(
-                                  24.0, 4.0, 8.0, 4.0),
-                              hidesUnderline: true,
-                              isSearchable: false,
-                              isMultiSelect: false,
-                            ),
                           ),
                         ),
                         FFButtonWidget(
@@ -403,8 +296,7 @@ class _ProductDetailsWidgetState extends State<ProductDetailsWidget>
                     ),
                   ),
                 ),
-              ).animateOnPageLoad(
-                  animationsMap['containerOnPageLoadAnimation']!),
+              ),
             ],
           ),
         );
