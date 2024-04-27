@@ -48,13 +48,13 @@ class InventoryMainModel extends FlutterFlowModel<InventoryMainWidget> {
         lastResponse: null,
       ),
     );
-    return controller..addPageRequestListener(listViewGetProductsAPIPage);
+    return controller..addPageRequestListener(listViewGetAllInventoryPage);
   }
 
-  void listViewGetProductsAPIPage(ApiPagingParams nextPageMarker) =>
-      listViewApiCall!(nextPageMarker).then((listViewGetProductsAPIResponse) {
+  void listViewGetAllInventoryPage(ApiPagingParams nextPageMarker) =>
+      listViewApiCall!(nextPageMarker).then((listViewGetAllInventoryResponse) {
         final pageItems =
-            (listViewGetProductsAPIResponse.jsonBody ?? []).toList() as List;
+            (listViewGetAllInventoryResponse.jsonBody ?? []).toList() as List;
         final newNumItems = nextPageMarker.numItems + pageItems.length;
         listViewPagingController?.appendPage(
           pageItems,
@@ -62,7 +62,7 @@ class InventoryMainModel extends FlutterFlowModel<InventoryMainWidget> {
               ? ApiPagingParams(
                   nextPageNumber: nextPageMarker.nextPageNumber + 1,
                   numItems: newNumItems,
-                  lastResponse: listViewGetProductsAPIResponse,
+                  lastResponse: listViewGetAllInventoryResponse,
                 )
               : null,
         );

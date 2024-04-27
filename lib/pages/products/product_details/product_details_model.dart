@@ -1,5 +1,4 @@
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/form_field_controller.dart';
 import 'product_details_widget.dart' show ProductDetailsWidget;
 import 'package:flutter/material.dart';
 
@@ -8,9 +7,6 @@ class ProductDetailsModel extends FlutterFlowModel<ProductDetailsWidget> {
 
   // State field(s) for CountController widget.
   int? countControllerValue;
-  // State field(s) for DropDown widget.
-  String? dropDownValue;
-  FormFieldController<String>? dropDownValueController;
 
   @override
   void initState(BuildContext context) {}

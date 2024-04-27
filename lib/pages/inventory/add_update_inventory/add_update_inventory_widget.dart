@@ -1,5 +1,6 @@
 import '/flutter_flow/flutter_flow_choice_chips.dart';
 import '/flutter_flow/flutter_flow_count_controller.dart';
+import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -33,8 +34,11 @@ class _AddUpdateInventoryWidgetState extends State<AddUpdateInventoryWidget> {
     super.initState();
     _model = createModel(context, () => AddUpdateInventoryModel());
 
-    _model.productNameTextController ??= TextEditingController();
-    _model.productNameFocusNode ??= FocusNode();
+    _model.productNameTextController1 ??= TextEditingController();
+    _model.productNameFocusNode1 ??= FocusNode();
+
+    _model.productNameTextController2 ??= TextEditingController();
+    _model.productNameFocusNode2 ??= FocusNode();
 
     _model.descriptionTextController ??= TextEditingController();
     _model.descriptionFocusNode ??= FocusNode();
@@ -70,8 +74,8 @@ class _AddUpdateInventoryWidgetState extends State<AddUpdateInventoryWidget> {
             borderWidth: 1.0,
             buttonSize: 60.0,
             icon: Icon(
-              Icons.arrow_back_ios_new,
-              color: FlutterFlowTheme.of(context).secondary,
+              Icons.arrow_back,
+              color: FlutterFlowTheme.of(context).primaryText,
               size: 30.0,
             ),
             onPressed: () async {
@@ -83,10 +87,8 @@ class _AddUpdateInventoryWidgetState extends State<AddUpdateInventoryWidget> {
               widget.inventoryTitle,
               'Inventory',
             ),
-            style: FlutterFlowTheme.of(context).titleMedium.override(
-                  fontFamily: 'Readex Pro',
-                  color: FlutterFlowTheme.of(context).secondary,
-                  fontSize: 22.0,
+            style: FlutterFlowTheme.of(context).titleLarge.override(
+                  fontFamily: 'Outfit',
                   letterSpacing: 0.0,
                 ),
           ),
@@ -141,11 +143,73 @@ class _AddUpdateInventoryWidgetState extends State<AddUpdateInventoryWidget> {
                                         child: Column(
                                           mainAxisSize: MainAxisSize.max,
                                           children: [
+                                            FlutterFlowDropDown<String>(
+                                              controller: _model
+                                                      .dropDownValueController ??=
+                                                  FormFieldController<String>(
+                                                      null),
+                                              options: const ['Option 1'],
+                                              onChanged: (val) => setState(() =>
+                                                  _model.dropDownValue = val),
+                                              width: 357.0,
+                                              height: 56.0,
+                                              searchHintTextStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                              searchTextStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                              textStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                              hintText: 'Please select...',
+                                              searchHintText:
+                                                  'Search for product owner...',
+                                              icon: Icon(
+                                                Icons
+                                                    .keyboard_arrow_down_rounded,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryText,
+                                                size: 24.0,
+                                              ),
+                                              fillColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryBackground,
+                                              elevation: 2.0,
+                                              borderColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              borderWidth: 2.0,
+                                              borderRadius: 8.0,
+                                              margin: const EdgeInsetsDirectional
+                                                  .fromSTEB(
+                                                      16.0, 4.0, 16.0, 4.0),
+                                              hidesUnderline: true,
+                                              isOverButton: true,
+                                              isSearchable: true,
+                                              isMultiSelect: false,
+                                            ),
                                             TextFormField(
                                               controller: _model
-                                                  .productNameTextController,
+                                                  .productNameTextController1,
                                               focusNode:
-                                                  _model.productNameFocusNode,
+                                                  _model.productNameFocusNode1,
                                               autofocus: true,
                                               textCapitalization:
                                                   TextCapitalization.words,
@@ -249,7 +313,118 @@ class _AddUpdateInventoryWidgetState extends State<AddUpdateInventoryWidget> {
                                                   FlutterFlowTheme.of(context)
                                                       .primary,
                                               validator: _model
-                                                  .productNameTextControllerValidator
+                                                  .productNameTextController1Validator
+                                                  .asValidator(context),
+                                            ),
+                                            TextFormField(
+                                              controller: _model
+                                                  .productNameTextController2,
+                                              focusNode:
+                                                  _model.productNameFocusNode2,
+                                              autofocus: true,
+                                              textCapitalization:
+                                                  TextCapitalization.words,
+                                              obscureText: false,
+                                              decoration: InputDecoration(
+                                                labelText: 'Product Name...',
+                                                labelStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelLarge
+                                                        .override(
+                                                          fontFamily:
+                                                              'Readex Pro',
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                                hintStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Readex Pro',
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                                errorStyle: FlutterFlowTheme.of(
+                                                        context)
+                                                    .bodyMedium
+                                                    .override(
+                                                      fontFamily: 'Readex Pro',
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .error,
+                                                      fontSize: 12.0,
+                                                      letterSpacing: 0.0,
+                                                    ),
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .alternate,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.0),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primary,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.0),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.0),
+                                                ),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          12.0),
+                                                ),
+                                                filled: true,
+                                                fillColor:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                                contentPadding:
+                                                    const EdgeInsetsDirectional
+                                                        .fromSTEB(16.0, 20.0,
+                                                            16.0, 20.0),
+                                              ),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        fontSize: 16.0,
+                                                        letterSpacing: 0.0,
+                                                      ),
+                                              cursorColor:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              validator: _model
+                                                  .productNameTextController2Validator
                                                   .asValidator(context),
                                             ),
                                             TextFormField(
@@ -808,7 +983,9 @@ class _AddUpdateInventoryWidgetState extends State<AddUpdateInventoryWidget> {
                         onPressed: () {
                           print('Button pressed ...');
                         },
-                        text: 'Save',
+                        text: widget.inventoryTitle == 'Add New Item'
+                            ? 'Add'
+                            : 'Update',
                         options: FFButtonOptions(
                           width: double.infinity,
                           height: 48.0,
